@@ -154,15 +154,16 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 蛋糕與煙火立體包裝盒 --- */
+        /* --- 🍓 蛋糕舞台：採用絕對不會位移的置中架構 --- */
         .cake-wrapper {
             position: relative;
             width: 100%;
-            height: 180px; 
+            height: 200px; /* 給上方留出更多隨機煙火的舞台空間 */
             margin: 35px 0 25px 0;
+            text-align: center;
         }
 
-        /* 💡 終極修正：煙火畫布移入卡片內，層級調高，飄在文字與卡片前方 */
+        /* 煙火畫布：覆蓋整個蛋糕舞台，且層級在最前面 */
         #fireworks-canvas {
             position: absolute;
             top: 0;
@@ -170,23 +171,23 @@
             width: 100%;
             height: 100%;
             pointer-events: none; 
-            z-index: 4; /* 💡 凌駕於卡片表面，讓煙火直接在卡片上綻放 */
+            z-index: 4; 
         }
 
+        /* 蛋糕容器：使用不可撼動的絕對置中 */
         .cake-container {
-            display: flex !important;
+            display: inline-flex !important; /* 確保水平完美居中 */
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
             width: 160px;
             height: 140px;
-            margin: 0 auto;
             position: absolute;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             animation: fadeInCake 2s ease forwards;
-            z-index: 3; /* 💡 蛋糕在煙火後方一點點，形成前後景深 */
+            z-index: 3; 
         }
 
         .flame {
@@ -452,19 +453,18 @@
         }, 400);
     }
 
-    // 💡 終極優化：完全拔除原生 confirm 視窗，點擊直接執行溶解銷毀
     function destroyPage() {
         if(fireworkInterval) clearInterval(fireworkInterval);
         document.body.innerHTML = `
             <div style="text-align: center; color: #444; font-family: monospace; padding-top: 25vh; padding-left: 20px; padding-right: 20px; animation: fadeInCake 1s ease;">
-                <h2>[ 紀錄已安全銷毀 ]</h2>
+                <h2>[ 紀錄已完全銷毀 ]</h2>
                 <p style="font-size:0.95rem; color:#888;">網頁緩存已清除，社交壓力歸零。</p>
                 <p style="font-size:1rem; color:var(--accent-color); margin-top:15px;">生日快樂！願妳今天過得最舒心自在 ：）</p>
             </div>
         `;
     }
 
-    /* --- 🎆 精準重構：卡片內層·蛋糕前方·彩色噴發大煙火引擎 --- */
+    /* --- 🎆 智慧重構：卡片內層·圍繞蛋糕隨機綻放煙火引擎 --- */
     let fireworkInterval;
     function initSmartFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
@@ -486,11 +486,11 @@
                 this.y = y;
                 this.color = color;
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 3 + 1; // 完美的爆裂發散速度
+                const speed = Math.random() * 3 + 1; // 大煙火漂亮的擴散速度
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - 0.5; // 帶有一點點仙女棒往上的噴發感
+                this.vy = Math.sin(angle) * speed - 0.3; 
                 this.alpha = 1;
-                this.gravity = 0.05; // 漂亮的重力微下墜線條
+                this.gravity = 0.05; 
             }
             draw() {
                 ctx.save();
@@ -507,37 +507,38 @@
                 this.x += this.vx;
                 this.y += this.vy;
                 this.vy += this.gravity;
-                this.alpha -= 0.018; // 絲滑淡出
+                this.alpha -= 0.018; 
             }
         }
 
+        // 💡 智慧隨機演算法：擺脫複雜的手機座標抓取，改用穩定的相對畫布中心隨機發射
         function createLocalFirework() {
-            // 發射點精準鎖定在畫布水平中央，且在草莓仙女棒的頂端附近
-            const startX = canvas.width / 2;
-            const startY = canvas.height - 110; 
-
-            // 讓爆炸中心在草莓上方產生隨機微幅跳動（看起來更像多層次大煙火在蛋糕旁炸開）
-            const burstX = startX + (Math.random() * 60 - 30);
-            const burstY = startY - (Math.random() * 40 + 10);
+            // 畫布的中心水平線就是置中蛋糕的位置
+            const centerX = canvas.width / 2;
+            
+            // 讓大煙火的爆炸中心 X 軸在蛋糕周圍（左 80px 到 右 80px）隨機跳動
+            const burstX = centerX + (Math.random() * 160 - 80);
+            
+            // 讓 Y 軸在蛋糕上方（高度 40px 到 120px 的夜空）隨機跳動，創造滿天連發感
+            const burstY = canvas.height - 140 - (Math.random() * 80);
 
             const color = colors[Math.floor(Math.random() * colors.length)];
             
-            // 每發有 45 顆飽滿的高光彩色粒子
+            // 每發有 45 顆高光彩色大粒子
             for (let i = 0; i < 45; i++) {
                 particles.push(new Particle(burstX, burstY, color));
             }
         }
 
-        // 每 0.5 秒在蛋糕周圍瘋狂連發彩色大煙火！
+        // 每 0.5 秒在蛋糕周圍隨機連發彩色大煙火
         fireworkInterval = setInterval(createLocalFirework, 500);
         
+        // 進去瞬間立刻在不同隨機位置三連發
         createLocalFirework();
         setTimeout(createLocalFirework, 150);
         setTimeout(createLocalFirework, 300);
 
         function loop() {
-            // 清理畫布並創造完美的彩色拖尾效果
-            ctx.fillStyle = 'rgba(45, 45, 45, 0.2)';
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             particles.forEach((p, index) => {
