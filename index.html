@@ -154,13 +154,12 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🎂 終極修正：物理防震、絕對置中舞台 --- */
+        /* --- 🍓 蛋糕舞台置中架構 --- */
         .cake-wrapper {
             position: relative;
             width: 100%;
             height: 200px; 
             margin: 35px 0 25px 0;
-            /* 用最純粹的 Flexbox 強制所有子元素在中央疊加，完全免疫任何位移 Bug */
             display: flex !important;
             justify-content: center !important;
             align-items: flex-end !important;
@@ -176,7 +175,6 @@
             z-index: 4; 
         }
 
-        /* 蛋糕容器：拿掉 translateX，完全靠父層 Flex 置中，穩如泰山 */
         .cake-container {
             display: flex !important;
             flex-direction: column;
@@ -265,6 +263,7 @@
 <body>
 
 <div class="container">
+    <!-- 首頁 -->
     <div id="start-page">
         <h2>星座與星盤潛意識能量分析</h2>
         <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析複合型人格。</p>
@@ -280,39 +279,93 @@
         <button class="btn" style="text-align:center; background-color: var(--accent-color); color: #1a1a1a; font-weight: bold;" onclick="validateBirthday()">定位星盤並開始分析</button>
     </div>
 
+    <!-- Q1 -->
     <div id="q1" class="hidden">
-        <h2>Q1. 當你身處熱鬧的大型聚會時，你最常出現的狀態是？</h2>
-        <button class="btn" onclick="nextQuestion(2)">A. 靈魂出竅，表面在笑，內心其實在想等一下宵夜要吃什麼</button>
-        <button class="btn" onclick="nextQuestion(2)">B. 八面玲瓏，展現滿分的社交人設，跟誰都能打成一片</button>
-        <button class="btn" onclick="nextQuestion(2)">C. 以上皆是。前半段是熱情交際花，後半段電量耗盡只想原地隱形</button>
+        <h2>Q1. 遇到初次見面的人，妳通常扮演什麼樣的角色？</h2>
+        <button class="btn" onclick="nextQuestion(2)">A. 稍微有點被動，等待對方先開啟話題</button>
+        <button class="btn" onclick="nextQuestion(2)">B. 氣氛烘托大師，跟誰都能聊得很熱絡、絕不冷場</button>
+        <button class="btn" onclick="nextQuestion(2)">C. 表面上談笑風生，內心其實在默默觀察對方的細節</button>
     </div>
 
+    <!-- Q2 -->
     <div id="q2" class="hidden">
-        <h2>Q2. 如果要在「眾人圍繞的盛大生日派對」和「跟特定在乎的人安靜度過」之間二選一？</h2>
-        <button class="btn" onclick="nextQuestion(3)">A. 當然是前者，派對動物怎麼能錯過狂歡！</button>
-        <button class="btn" onclick="nextQuestion(3)">B. 絕對是後者。大群人過節演戲太累了，只想把珍貴的時間留給真正在意的人</button>
-        <button class="btn" onclick="nextQuestion(3)">C. 看心情，但基本上現在比較傾向享受精準、舒適的高質量陪伴</button>
+        <h2>Q2. 當妳身處熱鬧的大型社交聚會時，妳最常出現的真實狀態是？</h2>
+        <button class="btn" onclick="nextQuestion(3)">A. 靈魂出竅，表面在笑，內心其實在想等一下宵夜要吃什麼</button>
+        <button class="btn" onclick="nextQuestion(3)">B. 活力滿滿，展現滿分的社交人設，成為全場的焦點</button>
+        <button class="btn" onclick="nextQuestion(3)">C. 以上皆是。前半段是熱情交際花，後半段電量耗盡只想原地隱形</button>
     </div>
 
+    <!-- Q3 -->
     <div id="q3" class="hidden">
-        <h2>Q3. 關於感情與生活，你最無法忍受的事情是什麼？</h2>
-        <button class="btn" onclick="nextQuestion(4)">A. 生活一成不變，缺乏新鮮感與有趣的靈魂</button>
-        <button class="btn" onclick="nextQuestion(4)">B. 身邊從不缺桃花和關注，但對方根本不懂我內心的寂寞</button>
-        <button class="btn" onclick="nextQuestion(4)">C. 被沒必要的社交儀式和人情世故綁架</button>
+        <h2>Q3. 平時安排休假行程時，妳更傾向哪一種生活型態？</h2>
+        <button class="btn" onclick="nextQuestion(4)">A. 計畫趕不上變化，說走就走的未知冒險才有趣</button>
+        <button class="btn" onclick="nextQuestion(4)">B. 精密規劃每一個時間點，絕對要照著行程走</button>
+        <button class="btn" onclick="nextQuestion(4)">C. 待在家裡徹底與世隔絕，誰都不要來打擾我</button>
     </div>
 
+    <!-- Q4 -->
     <div id="q4" class="hidden">
-        <h2>Q4. 最終星盤比對：請選擇目前最符合你當下狀態的描述？</h2>
-        <button class="btn" onclick="startLoading()">A. 雖然今天生日，但我本來打算低調混過去的...</button>
-        <button class="btn" onclick="startLoading()">B. 這個測驗有點東西，把我體內的靈魂摸得滿透的</button>
-        <button class="btn" onclick="startLoading()">C. 猜到是你在搞鬼了</button>
+        <h2>Q4. 當妳在生活中發現某個超好笑或很新奇的梗，妳的第一反應是？</h2>
+        <button class="btn" onclick="nextQuestion(5)">A. 默默點個讚，自己存在收藏夾裡就好</button>
+        <button class="btn" onclick="nextQuestion(5)">B. 瘋狂發限時動態，希望分享快樂給所有人</button>
+        <button class="btn" onclick="nextQuestion(5)">C. 一秒傳給某個妳心中特定、覺得他一定懂這個笑點的人</button>
     </div>
 
+    <!-- Q5 -->
+    <div id="q5" class="hidden">
+        <h2>Q5. 關於感情與生活，妳目前最無法忍受的事情是什麼？</h2>
+        <button class="btn" onclick="nextQuestion(6)">A. 生活一成不變，缺乏新鮮感與有趣的靈魂</button>
+        <button class="btn" onclick="nextQuestion(6)">B. 身邊從不缺關注，但對方根本不懂我內心的真實想法</button>
+        <button class="btn" onclick="nextQuestion(6)">C. 被沒必要的社交儀式和人情世故綁架，覺得心累</button>
+    </div>
+
+    <!-- Q6 -->
+    <div id="q6" class="hidden">
+        <h2>Q6. 如果今天有一個完全屬於妳、不會被打擾的空閒夜晚，妳最希望怎麼過？</h2>
+        <button class="btn" onclick="nextQuestion(7)">A. 約一大群朋友去喝酒狂歡、夜唱或唱歌</button>
+        <button class="btn" onclick="nextQuestion(7)">B. 只要跟某個「特定且在意的人」待在一起，安靜地做什麼都好</button>
+        <button class="btn" onclick="nextQuestion(7)">C. 一個人看電影、追劇，享受最高質量的孤獨</button>
+    </div>
+
+    <!-- Q7 -->
+    <div id="q7" class="hidden">
+        <h2>Q7. 妳認為自己在朋友眼中，通常是一個具備什麼特質的人？</h2>
+        <button class="btn" onclick="nextQuestion(8)">A. 嘴硬心軟，雖然愛開玩笑但其實超級講義氣</button>
+        <button class="btn" onclick="nextQuestion(8)">B. 溫柔體貼，總是能第一時間照顧到所有人的情緒</button>
+        <button class="btn" onclick="nextQuestion(8)">C. 神秘且難以捉摸，永遠猜不透妳下一步在想什麼</button>
+    </div>
+
+    <!-- Q8 -->
+    <div id="q8" class="hidden">
+        <h2>Q8. 如果要在「眾人圍繞的盛大慶生派對」和「跟特定在乎的人安靜度過」之間二選一？</h2>
+        <button class="btn" onclick="nextQuestion(9)">A. 當然是盛大的派對，熱鬧過節才有儀式感！</button>
+        <button class="btn" onclick="nextQuestion(9)">B. 絕對是後者。大群人過節演戲太累了，只想享受精準、舒適的陪伴</button>
+        <button class="btn" onclick="nextQuestion(9)">C. 看心情而定，但基本上目前更傾向把時間留給重要的人</button>
+    </div>
+
+    <!-- Q9 -->
+    <div id="q9" class="hidden">
+        <h2>Q9. 面對自己真正重視、但局勢還有些不明朗的關係時，妳的心態通常是？</h2>
+        <button class="btn" onclick="nextQuestion(10)">A. 想太多、顧慮太多，結果不小心表現得有點忽冷忽熱</button>
+        <button class="btn" onclick="nextQuestion(10)">B. 直接打直球進攻，不喜歡猜來猜去、不前不後的感覺</button>
+        <button class="btn" onclick="nextQuestion(10)">C. 順其自然，默默等待對方的下一步動作</button>
+    </div>
+
+    <!-- Q10 -->
+    <div id="q10" class="hidden">
+        <h2>Q10. 最終星盤核心驗證：請選擇目前最符合妳當下狀態的描述？</h2>
+        <button class="btn" onclick="startLoading()">A. 雖然今天生日，但我本來打算低調混過去的...</button>
+        <button class="btn" onclick="startLoading()">B. 這個測驗有點東西，把我體內的雙子座靈魂摸得滿透的</button>
+        <button class="btn" onclick="startLoading()">C. 猜到是你在搞鬼了，但我承認這方式很有新意</button>
+    </div>
+
+    <!-- 讀取中跑馬燈 -->
     <div id="loading-page" class="hidden">
         <h2>📊 雙子座星盤數據矩陣解碼中...</h2>
         <div id="loading-console"></div>
     </div>
 
+    <!-- 最終驚喜結果 -->
     <div id="result-page" class="hidden">
         <h2>🏆 分析結果出爐</h2>
         <div class="result-title">【風象星盤傳奇：披著社交外衣的孤獨風之子】</div>
@@ -331,6 +384,7 @@
             不管未來的局勢怎麼變，都希望妳新的一歲依然能保持聰明、閃耀、活得像風一樣自由。生日快樂！
         </div>
 
+        <!-- 🎂 完美置中大草莓雙層蛋糕舞台盒 -->
         <div class="cake-wrapper">
             <canvas id="fireworks-canvas"></canvas>
             <div id="my-cake" class="cake-container">
@@ -364,7 +418,6 @@
         }
     }
 
-    // 手機流暢報錯提示
     function showError(msg) {
         const errorBox = document.getElementById('error-box');
         if (msg === "") {
@@ -411,7 +464,8 @@
     }
 
     function nextQuestion(qNum) {
-        for(let i=1; i<=4; i++) {
+        // 隱藏 Q1 ~ Q10 所有區塊
+        for(let i=1; i<=10; i++) {
             document.getElementById('q' + i).classList.add('hidden');
         }
         document.getElementById('q' + qNum).classList.remove('hidden');
@@ -419,7 +473,7 @@
     }
 
     function startLoading() {
-        document.getElementById('q4').classList.add('hidden');
+        document.getElementById('q10').classList.add('hidden');
         document.getElementById('loading-page').classList.remove('hidden');
         window.scrollTo(0, 0);
 
@@ -512,13 +566,9 @@
         }
 
         function createLocalFirework() {
-            // 💡 物理置中：畫布的「正中間」就是蛋糕所在的位置
             const centerX = canvas.width / 2;
-            
-            // 讓煙火以正中央為基準，在周圍隨機綻放
             const burstX = centerX + (Math.random() * 140 - 70);
             const burstY = canvas.height - 130 - (Math.random() * 70);
-
             const color = colors[Math.floor(Math.random() * colors.length)];
             
             for (let i = 0; i < 45; i++) {
