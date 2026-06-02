@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 雙重人格與星盤潛意識能量分析</title>
     <style>
         :root {
@@ -12,50 +12,56 @@
             --card-bg: #2d2d2d;
         }
 
+        /* 針對手機全面優化底色與字體縮放 */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace, "Microsoft JhengHei";
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, monospace, "Microsoft JhengHei";
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* 消除手機點擊時的藍色陰影 */
         }
 
         .container {
             background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            max-width: 600px;
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.6);
+            max-width: 500px;
             width: 100%;
             border: 1px solid #444;
+            box-sizing: border-box;
         }
 
         h2 {
             color: var(--accent-color);
             margin-top: 0;
             border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            font-size: 1.4rem;
+            padding-bottom: 12px;
+            font-size: 1.25rem;
+            line-height: 1.4;
         }
 
         .input-group {
             margin: 20px 0;
         }
 
+        /* 放大手機輸入框，避免 iOS 自動放大畫面 */
         .input-field {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background-color: #222;
             border: 1px solid #555;
             color: #fff;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
+            transition: border-color 0.2s;
         }
 
         .input-field:focus {
@@ -63,25 +69,38 @@
             outline: none;
         }
 
+        /* 放大手機點擊區域，高度調大更好按 */
         .btn {
             display: block;
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 14px 12px;
+            margin: 12px 0;
             background-color: #3a3a3a;
             color: var(--text-color);
             border: 1px solid #555;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             text-align: left;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
             transition: all 0.2s ease;
         }
 
-        .btn:hover {
+        /* 移除手機上 hover 的殘留效果，改用 active 觸感 */
+        .btn:active {
             background-color: #4a4a4a;
             border-color: var(--accent-color);
             color: var(--accent-color);
+        }
+
+        /* 桌機滑鼠懸停效果 */
+        @media (min-width: 768px) {
+            .btn:hover {
+                background-color: #4a4a4a;
+                border-color: var(--accent-color);
+                color: var(--accent-color);
+            }
+            h2 { font-size: 1.4rem; }
         }
 
         .hidden {
@@ -90,49 +109,54 @@
 
         .loading-text {
             color: var(--accent-color);
-            margin: 5px 0;
-            font-size: 0.9rem;
+            margin: 8px 0;
+            font-size: 0.85rem;
+            line-height: 1.4;
         }
 
         .result-title {
             color: #ff79c6;
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.15rem;
             margin-bottom: 15px;
+            line-height: 1.4;
         }
 
         ul {
-            padding-left: 20px;
+            padding-left: 18px;
             line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .blessing {
             background-color: #222;
-            padding: 20px;
+            padding: 18px;
             border-left: 4px solid var(--accent-color);
             margin-top: 20px;
-            line-height: 1.8;
+            line-height: 1.7;
             color: #f1fa8c;
+            font-size: 0.95rem;
+            border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🎂 生日蛋糕動畫 CSS --- */
+        /* --- 🎂 生日蛋糕動畫 CSS (完美自適應手機) --- */
         .cake-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 30px 0;
+            margin: 25px 0;
             animation: fadeInCake 2s ease forwards;
         }
 
         .cake {
             position: relative;
-            width: 120px;
-            height: 60px;
+            width: 110px;
+            height: 55px;
             background: #f1fa8c;
             border-radius: 10px 10px 0 0;
             box-shadow: inset 0 10px 0 #ff79c6;
@@ -140,22 +164,22 @@
 
         .candle {
             position: absolute;
-            width: 8px;
-            height: 30px;
+            width: 6px;
+            height: 25px;
             background: #ff5555;
-            top: -30px;
-            left: 56px;
+            top: -25px;
+            left: 52px;
             border-radius: 2px;
         }
 
         .flame {
             position: absolute;
-            width: 12px;
-            height: 18px;
+            width: 10px;
+            height: 15px;
             background: #ffb86c;
             border-radius: 50% 50% 20% 20%;
-            top: -45px;
-            left: 54px;
+            top: -38px;
+            left: 50px;
             animation: flicker 0.6s infinite alternate;
             box-shadow: 0 0 10px #ffb86c;
         }
@@ -166,10 +190,9 @@
         }
 
         @keyframes fadeInCake {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* -------------------------- */
 
         .destroy-btn {
             background-color: #ff5555 !important;
@@ -177,29 +200,24 @@
             text-align: center !important;
             font-weight: bold;
         }
-        .destroy-btn:hover {
-            background-color: #ff3333 !important;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- 1. 歡迎首頁：輸入西元生日 -->
     <div id="start-page">
         <h2>♊ 雙重人格與星盤潛意識能量分析</h2>
-        <p>本測驗由後端星盤數據模型驅動，專門解析「外在社交能力極強、內心邊界感極深」的複合型人格。</p>
+        <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析「外在社交能力極強、內心邊界感極深」的複合型人格。</p>
         
         <div class="input-group">
-            <label style="color: var(--accent-color); display: block; margin-bottom: 8px;">請輸入你的西元出生年月日：</label>
-            <input type="text" id="birthday-input" class="input-field" placeholder="範例：1998/06/01">
+            <label style="color: var(--accent-color); display: block; margin-bottom: 8px; font-size: 0.95rem;">請輸入你的西元出生年月日：</label>
+            <input type="text" id="birthday-input" class="input-field" placeholder="範例：1998/06/01" onkeypress="handleKeyPress(event)">
         </div>
         
-        <p style="color: #888; font-size: 0.9rem;">* 系統將根據出生年月日精準定位你的原始星盤核心能量。</p>
+        <p style="color: #888; font-size: 0.85rem; line-height: 1.4;">* 系統將根據出生年月日精準定位你的原始星盤核心能量。</p>
         <button class="btn" style="text-align:center; background-color: var(--accent-color); color: #1a1a1a; font-weight: bold;" onclick="validateBirthday()">定位星盤並開始分析</button>
     </div>
 
-    <!-- 2. 問題 1 (原本的Q1變Q2，以此類推) -->
     <div id="q1" class="hidden">
         <h2>Q1. 當你身處熱鬧的百人大型聚會時，你最常出現的狀態是？</h2>
         <button class="btn" onclick="nextQuestion(2)">A. 靈魂出竅，表面在笑，內心其實在想等一下宵夜要吃什麼</button>
@@ -207,7 +225,6 @@
         <button class="btn" onclick="nextQuestion(2)">C. 以上皆是。前半段是熱情交際花，後半段電量耗盡只想原地隱形</button>
     </div>
 
-    <!-- 3. 問題 2 -->
     <div id="q2" class="hidden">
         <h2>Q2. 如果要在「眾人圍繞的盛大生日派對」和「跟特定在乎的人安靜度過」之間二選一？</h2>
         <button class="btn" onclick="nextQuestion(3)">A. 當然是前者，派對動物怎麼能錯過狂歡！</button>
@@ -215,7 +232,6 @@
         <button class="btn" onclick="nextQuestion(3)">C. 看心情，但基本上現在比較傾向享受精準、舒適的高質量陪伴</button>
     </div>
 
-    <!-- 4. 問題 3 -->
     <div id="q3" class="hidden">
         <h2>Q3. 關於感情與生活，你最無法忍受的事情是什麼？</h2>
         <button class="btn" onclick="nextQuestion(4)">A. 生活一成不變，缺乏新鮮感與有趣的靈魂</button>
@@ -223,7 +239,6 @@
         <button class="btn" onclick="nextQuestion(4)">C. 被沒必要的社交儀式和人情世故綁架</button>
     </div>
 
-    <!-- 5. 問題 4 -->
     <div id="q4" class="hidden">
         <h2>Q4. 最終星盤比對：請選擇目前最符合你當下狀態的描述？</h2>
         <button class="btn" onclick="startLoading()">A. 雖然今天生日，但我本來打算低調混過去的...</button>
@@ -231,31 +246,29 @@
         <button class="btn" onclick="startLoading()">C. 猜到是你在搞鬼了，但我承認這個慶生方式有驚艷到我</button>
     </div>
 
-    <!-- 6. 讀取中跑馬燈 -->
     <div id="loading-page" class="hidden">
         <h2>📊 雙子座星盤數據矩陣解碼中...</h2>
         <div id="loading-console"></div>
     </div>
 
-    <!-- 7. 最終驚喜結果 -->
     <div id="result-page" class="hidden">
         <h2>🏆 分析結果出爐</h2>
         <div class="result-title">【風象星盤傳奇：披著社交外衣的孤獨風之子】</div>
         
-        <p><strong>📊 雙子座核心特質精準解碼：</strong></p>
+        <p style="font-size: 0.95rem;"><strong>📊 雙子座核心特質精準解碼：</strong></p>
         <ul>
             <li><strong>八面玲瓏的偽裝：</strong> 天生自帶高情商與滿分魅力，不缺關注、不缺對象，在群體中永遠游刃有餘。</li>
-            <li><strong>傲嬌的防禦機制：</strong> 討厭無聊、流於形式的傳統慶生（比如尷尬的生日歌和拆禮物）。對你來說，大群人的狂歡只是消耗能量，你早就看透了這種膚淺的熱鬧。</li>
+            <li><strong>傲嬌的防禦機制：</strong> 討厭無聊、流於形式的傳統慶生。對你來說，大群人的狂歡只是消耗能量，你早就看透了這種膚淺的熱鬧。</li>
             <li><strong>精準的情感偏好：</strong> 骨子裡其實很內向、怕累。在新的一歲裡，你內心深處最渴望的，其實是褪去所有社交面具，只跟那個「特定且在意的人」共享一段安靜、放鬆的高質量時光。</li>
         </ul>
 
         <div class="blessing">
-            謝謝你過去一年的陪伴與照顧。今天這個特別的日子，就不佔用你太多寶貴的社交電量了。<br><br>
-            知道你平時應付各種人際關係已經很辛苦了，所以這個網頁沒有喧鬧的大群人，只有一個默默為你亮起的微光小蛋糕。<br><br>
-            祝你今天能順利跟你在意的人（或者是享受最舒適的個人時光）好好放鬆！希望你新的一歲依然聰明、閃耀、Bug自由！生日快樂！
+            謝謝我們在今年相遇。雖然認識的時間還不算太長，但這陣子和妳的相處、聊天，都是我生活裡很亮眼的時刻。<br><br>
+            知道妳平時應付生活與社交已經很辛苦了，也明白每個人心裡可能都有一些不容易跨過去的顧慮。所以這個特別的日子，我不打算給妳任何社交壓力和負擔，沒有喧鬧的人群，只有一個默默在網頁裡為妳亮起的微光小蛋糕。<br><br>
+            今天，就把所有的顧慮和心累都先放下吧。祝妳能順利跟妳最在意、最能讓妳放鬆的人（或者享受最舒適的個人時光）好好充個電！<br><br>
+            不管未來的局勢怎麼變，都希望妳新的一歲依然能保持聰明、閃耀、活得像風一樣自由。生日快樂！
         </div>
 
-        <!-- 🎂 緩緩浮現的小蛋糕動畫 -->
         <div class="cake-container">
             <div class="flame"></div>
             <div class="candle"></div>
@@ -267,32 +280,36 @@
 </div>
 
 <script>
-    // 第一步：驗證生日輸入
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); 
+            validateBirthday();
+        }
+    }
+
     function validateBirthday() {
         const input = document.getElementById('birthday-input').value.trim();
         if (input === '') {
             alert('請輸入你的西元出生年月日以利數據分析！');
             return;
         }
-        // 不管他輸入什麼，直接引導到下一題（後台自動鎖定雙子座）
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('q1').classList.remove('hidden');
+        window.scrollTo(0, 0); // 確保手機版切換時畫面回到最上方
     }
 
-    // 切換後續問題
     function nextQuestion(qNum) {
         for(let i=1; i<=4; i++) {
             document.getElementById('q' + i).classList.add('hidden');
         }
-        if(qNum === 1) document.getElementById('q1').classList.remove('hidden');
-        if(qNum === 2) document.getElementById('q2').classList.remove('hidden');
-        if(qNum === 3) document.getElementById('q3').classList.remove('hidden');
-        if(qNum === 4) document.getElementById('q4').classList.remove('hidden');
+        document.getElementById('q' + qNum).classList.remove('hidden');
+        window.scrollTo(0, 0); 
     }
 
     function startLoading() {
         document.getElementById('q4').classList.add('hidden');
         document.getElementById('loading-page').classList.remove('hidden');
+        window.scrollTo(0, 0);
 
         const consoleBox = document.getElementById('loading-console');
         const logs = [
@@ -321,6 +338,7 @@
                 setTimeout(() => {
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
+                    window.scrollTo(0, 0);
                 }, 800);
             }
         }, 400);
@@ -329,7 +347,7 @@
     function destroyPage() {
         if(confirm("確定要銷毀此紀錄嗎？（銷毀後不可復原）")) {
             document.body.innerHTML = `
-                <div style="text-align: center; color: #444; font-family: monospace; padding-top: 20vh;">
+                <div style="text-align: center; color: #444; font-family: monospace; padding-top: 20vh; padding-left: 15px; padding-right: 15px;">
                     <h2>[ 紀錄已完全銷毀 ]</h2>
                     <p>網頁緩存已清除，雙子座的社交防禦牆已重建。</p>
                     <p>生日快樂！快去陪你在意的人，或者好好享受無人打擾的自由吧：）</p>
