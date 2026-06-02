@@ -6,10 +6,10 @@
     <title>2026 雙重人格與星盤潛意識能量分析</title>
     <style>
         :root {
-            --bg-color: #0c0c0c; /* 稍微加深底色，讓煙火更顯眼 */
+            --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
             --accent-color: #64ffda;
-            --card-bg: rgba(35, 35, 35, 0.5); /* 提高卡片透明度，讓背景煙火更清晰 */
+            --card-bg: #2d2d2d;
         }
 
         body {
@@ -28,27 +28,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 煙火畫布：鋪滿整個螢幕背景 */
-        #fireworks-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; 
-            z-index: 0;
-        }
-
         .container {
             background-color: var(--card-bg);
             padding: 25px 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.6);
             max-width: 500px;
             width: 100%;
             border: 1px solid #444;
             box-sizing: border-box;
-            backdrop-filter: blur(6px); /* 微調毛玻璃感 */
             z-index: 1;
             position: relative;
         }
@@ -69,7 +57,7 @@
         .input-field {
             width: 100%;
             padding: 14px;
-            background-color: #1a1a1a;
+            background-color: #222;
             border: 1px solid #555;
             color: #fff;
             border-radius: 8px;
@@ -88,7 +76,7 @@
             width: 100%;
             padding: 14px 12px;
             margin: 12px 0;
-            background-color: #333;
+            background-color: #3a3a3a;
             color: var(--text-color);
             border: 1px solid #555;
             border-radius: 8px;
@@ -100,7 +88,7 @@
         }
 
         .btn:active {
-            background-color: #444;
+            background-color: #4a4a4a;
             border-color: var(--accent-color);
             color: var(--accent-color);
         }
@@ -144,7 +132,7 @@
         }
 
         .blessing {
-            background-color: #1a1a1a;
+            background-color: #222;
             padding: 18px;
             border-left: 4px solid var(--accent-color);
             margin-top: 20px;
@@ -154,17 +142,39 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 精緻雙層草莓蛋糕 CSS --- */
+        /* --- 🍓 大草莓雙層蛋糕與局部畫布結構 --- */
+        .cake-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px; /* 固定高度，給上方的煙火留出空間 */
+            margin: 35px 0 25px 0;
+        }
+
+        /* 煙火畫布：改為絕對定位，大小與蛋糕容器一模一樣 */
+        #fireworks-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2; /* 讓煙火飄在蛋糕前面 */
+        }
+
         .cake-container {
             display: flex !important;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            margin: 40px auto 25px auto;
             width: 160px;
             height: 140px;
-            position: relative;
+            margin: 0 auto;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             animation: fadeInCake 2s ease forwards;
+            z-index: 1;
         }
 
         .flame {
@@ -242,11 +252,9 @@
 </head>
 <body>
 
-<canvas id="fireworks-canvas"></canvas>
-
 <div class="container">
     <div id="start-page">
-        <h2>星座與星盤潛意識能量 analysis</h2>
+        <h2>星座與星盤潛意識能量分析</h2>
         <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析複合型人格。</p>
         
         <div class="input-group">
@@ -298,7 +306,7 @@
         <p style="font-size: 0.95rem;"><strong>📊 雙子座核心特質精準解碼：</strong></p>
         <ul>
             <li><strong>八面玲瓏的偽裝：</strong> 天生自帶高情商與滿分魅力，不缺關注、不缺對象，在群體中永遠游刃有餘。</li>
-            <li><strong>傲嬌的防禦機制：</strong> 討厭無聊、流於形式的傳統慶生。對你來說，大群人的狂歡只是消耗能量，你早就看透了這種膚淺的熱鬧。</li>
+            <li><strong>傲嬌的防禦機制：</strong> 討厭無聊、流於形式的傳統慶生。對你來說，大群人的狂歡傾囊相助只是消耗能量，你早就看透了這種膚淺的熱鬧。</li>
             <li><strong>精準的情感偏好：</strong> 骨子裡其實很內向、怕累。在新的一歲裡，你內心深處最渴望的，其實是褪去所有社交面具，只跟那個「特定且在意的人」共享一段安靜、放鬆的高質量時光。</li>
         </ul>
 
@@ -309,11 +317,14 @@
             不管未來的局勢怎麼變，都希望妳新的一歲依然能保持聰明、閃耀、活得像風一樣自由。生日快樂！
         </div>
 
-        <div class="cake-container">
-            <div class="flame"></div>
-            <div class="candle"></div>
-            <div class="strawberry"></div>
-            <div class="cake"></div>
+        <div class="cake-wrapper">
+            <canvas id="fireworks-canvas"></canvas>
+            <div class="cake-container">
+                <div class="flame"></div>
+                <div class="candle"></div>
+                <div class="strawberry"></div>
+                <div class="cake"></div>
+            </div>
         </div>
 
         <button class="btn destroy-btn" style="margin-top: 15px;" onclick="destroyPage()">[ 關閉網頁並銷毀本紀錄 ]</button>
@@ -376,7 +387,7 @@
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
                     window.scrollTo(0, 0);
-                    initFireworks(); // 開放結果頁，點燃更猛烈的滿天煙火！
+                    initLocalFireworks(); // 載入結果頁，點燃蛋糕專屬小煙火！
                 }, 800);
             }
         }, 400);
@@ -385,9 +396,6 @@
     function destroyPage() {
         if(confirm("確定要銷毀此紀錄嗎？（銷毀後不可復原）")) {
             if(fireworkInterval) clearInterval(fireworkInterval);
-            const canvas = document.getElementById('fireworks-canvas');
-            if(canvas) canvas.style.display = 'none';
-
             document.body.innerHTML = `
                 <div style="text-align: center; color: #444; font-family: monospace; padding-top: 20vh; padding-left: 15px; padding-right: 15px;">
                     <h2>[ 紀錄已完全銷毀 ]</h2>
@@ -398,21 +406,22 @@
         }
     }
 
-    /* --- 🎆 升級版：滿天繁星煙火粒子引擎 --- */
+    /* --- 🎆 蛋糕專屬：仙女棒局部煙火粒子引擎 --- */
     let fireworkInterval;
-    function initFireworks() {
+    function initLocalFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
+        const wrapper = canvas.parentElement;
         const ctx = canvas.getContext('2d');
 
+        // 讓畫布大小精準等於外層包裝盒
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = wrapper.clientWidth;
+            canvas.height = wrapper.clientHeight;
         }
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
 
         let particles = [];
-        const colors = ['#64ffda', '#ff79c6', '#ffb86c', '#ff5555', '#f1fa8c', '#bd93f9', '#50fa7b'];
+        const colors = ['#64ffda', '#ff79c6', '#ffb86c', '#ff5555', '#f1fa8c', '#bd93f9'];
 
         class Particle {
             constructor(x, y, color) {
@@ -420,19 +429,19 @@
                 this.y = y;
                 this.color = color;
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 3.5 + 1; // 稍微調快爆炸速度
+                const speed = Math.random() * 2 + 0.5; // 限制速度，讓火花集中在小範圍
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed;
-                this.alpha = 1; 
-                this.gravity = 0.05; // 重力微調，讓煙火下墜更有自然拋物線
+                this.vy = Math.sin(angle) * speed - 1; // 帶有一點向上噴發的初速度
+                this.alpha = 1;
+                this.gravity = 0.06; // 增加重力，讓火花呈現仙女棒下墜的拋物線
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, 1.8, 0, Math.PI * 2); // 縮小粒子半徑，呈現更細緻的滿天仙女棒碎光
+                ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 8; // 加強發光感
+                ctx.shadowBlur = 6;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
@@ -441,35 +450,29 @@
                 this.x += this.vx;
                 this.y += this.vy;
                 this.vy += this.gravity;
-                this.alpha -= 0.012; // 減緩淡出速度，讓煙火尾跡留在夜空的時間更長！
+                this.alpha -= 0.02; // 加快淡出，不讓火花飄出容器
             }
         }
 
-        function createFirework() {
-            // 隨機在全螢幕寬度發射
-            const x = Math.random() * canvas.width;
-            // 高度控制在螢幕中上段
-            const y = Math.random() * (canvas.height * 0.5) + (canvas.height * 0.1);
+        function spark() {
+            // 定位發射點：精準定位在蛋糕上方仙女棒火苗的位置 (畫布中心點附近)
+            const startX = canvas.width / 2;
+            const startY = canvas.height - 115; // 仙女棒頂端的相對高度
+
             const color = colors[Math.floor(Math.random() * colors.length)];
-            
-            // 提升單發粒子總數至 60 顆，讓煙火更澎湃
-            for (let i = 0; i < 60; i++) {
-                particles.push(new Particle(x, y, color));
+            // 每 0.2 秒噴發出 8 顆小碎火
+            for (let i = 0; i < 8; i++) {
+                particles.push(new Particle(startX, startY, color));
             }
         }
 
-        // 大幅縮短間隔！改為【每 0.6 秒】就連發一發，營造不間斷的滿天花火夜景
-        fireworkInterval = setInterval(createFirework, 600);
-        
-        // 初始載入立刻連爆 3 發，一進去就給她滿滿的驚喜
-        createFirework();
-        setTimeout(createFirework, 200);
-        setTimeout(createFirework, 400);
+        // 高頻率噴發，模擬仙女棒燃燒
+        fireworkInterval = setInterval(spark, 200);
 
         function loop() {
-            // 利用微弱的黑底覆蓋，創造美麗的煙火拖尾（殘影）效應
-            ctx.fillStyle = 'rgba(12, 12, 12, 0.15)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 清除畫布並留下淡淡殘影
+            ctx.fillStyle = 'rgba(45, 45, 45, 0.2)'; 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             particles.forEach((p, index) => {
                 p.update();
