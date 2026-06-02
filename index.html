@@ -146,11 +146,10 @@
         .cake-wrapper {
             position: relative;
             width: 100%;
-            height: 180px; /* 固定高度，給上方的煙火留出空間 */
+            height: 180px; 
             margin: 35px 0 25px 0;
         }
 
-        /* 煙火畫布：改為絕對定位，大小與蛋糕容器一模一樣 */
         #fireworks-canvas {
             position: absolute;
             top: 0;
@@ -158,7 +157,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 2; /* 讓煙火飄在蛋糕前面 */
+            z-index: 2; 
         }
 
         .cake-container {
@@ -259,7 +258,7 @@
         
         <div class="input-group">
             <label style="color: var(--accent-color); display: block; margin-bottom: 8px; font-size: 0.95rem;">請輸入你的西元出生年月日：</label>
-            <input type="text" id="birthday-input" class="input-field" placeholder="範例：1998/01/01" onkeypress="handleKeyPress(event)">
+            <input type="text" id="birthday-input" class="input-field" placeholder="直接輸入數字，例如：19980101" oninput="formatBirthday(this)" onkeypress="handleKeyPress(event)" maxlength="10">
         </div>
         
         <p style="color: #888; font-size: 0.85rem; line-height: 1.4;">* 系統將根據出生年月日精準定位你的原始星盤核心能量。</p>
@@ -306,7 +305,7 @@
         <p style="font-size: 0.95rem;"><strong>📊 雙子座核心特質精準解碼：</strong></p>
         <ul>
             <li><strong>八面玲瓏的偽裝：</strong> 天生自帶高情商與滿分魅力，不缺關注、不缺對象，在群體中永遠游刃有餘。</li>
-            <li><strong>傲嬌的防禦機制：</strong> 討厭無聊、流於形式的傳統慶生。對你來說，大群人的狂歡傾囊相助只是消耗能量，你早就看透了這種膚淺的熱鬧。</li>
+            <li><strong>傲嬌的防禦機制：</strong> 討厭無聊、流於形式的傳統慶生。對你來說，大群人的狂歡只是消耗能量，你早就看透了這種膚淺的熱鬧。</li>
             <li><strong>精準的情感偏好：</strong> 骨子裡其實很內向、怕累。在新的一歲裡，你內心深處最渴望的，其實是褪去所有社交面具，只跟那個「特定且在意的人」共享一段安靜、放鬆的高質量時光。</li>
         </ul>
 
@@ -332,6 +331,21 @@
 </div>
 
 <script>
+    // 💡 核心防呆：盲打自動切換格式功能
+    function formatBirthday(input) {
+        // 先把所有不是數字的字元全部濾掉
+        let value = input.value.replace(/\D/g, '');
+        
+        // 根據數字長度，動態安插斜線
+        if (value.length > 4 && value.length <= 6) {
+            value = value.replace(/^(\d{4})(\d+)/, '$1/$2');
+        } else if (value.length > 6) {
+            value = value.replace(/^(\d{4})(\d{2})(\d+)/, '$1/$2/$3');
+        }
+        
+        input.value = value;
+    }
+
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
             event.preventDefault(); 
@@ -339,12 +353,23 @@
         }
     }
 
+    // 💡 提交防呆驗證
     function validateBirthday() {
         const input = document.getElementById('birthday-input').value.trim();
+        // 移除非數字字元來計算真正長度
+        const pureNumbers = input.replace(/\D/g, '');
+        
         if (input === '') {
             alert('請輸入你的西元出生年月日以利數據分析！');
             return;
         }
+        
+        // 如果輸入的數字不夠完整（少於6位數，例如至少要打 980101 或 19980101）
+        if (pureNumbers.length < 6) {
+            alert('請輸入完整的出生年月日格式喔！\n範例：19980101');
+            return;
+        }
+        
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('q1').classList.remove('hidden');
         window.scrollTo(0, 0); 
@@ -387,7 +412,7 @@
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
                     window.scrollTo(0, 0);
-                    initLocalFireworks(); // 載入結果頁，點燃蛋糕專屬小煙火！
+                    initLocalFireworks(); 
                 }, 800);
             }
         }, 400);
@@ -406,14 +431,13 @@
         }
     }
 
-    /* --- 🎆 蛋糕專屬：仙女棒局部煙火粒子引擎 --- */
+    /* --- 🎆 仙女棒局部煙火粒子引擎 --- */
     let fireworkInterval;
     function initLocalFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
         const wrapper = canvas.parentElement;
         const ctx = canvas.getContext('2d');
 
-        // 讓畫布大小精準等於外層包裝盒
         function resizeCanvas() {
             canvas.width = wrapper.clientWidth;
             canvas.height = wrapper.clientHeight;
@@ -429,11 +453,11 @@
                 this.y = y;
                 this.color = color;
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 2 + 0.5; // 限制速度，讓火花集中在小範圍
+                const speed = Math.random() * 2 + 0.5; 
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - 1; // 帶有一點向上噴發的初速度
+                this.vy = Math.sin(angle) * speed - 1; 
                 this.alpha = 1;
-                this.gravity = 0.06; // 增加重力，讓火花呈現仙女棒下墜的拋物線
+                this.gravity = 0.06; 
             }
             draw() {
                 ctx.save();
@@ -450,27 +474,22 @@
                 this.x += this.vx;
                 this.y += this.vy;
                 this.vy += this.gravity;
-                this.alpha -= 0.02; // 加快淡出，不讓火花飄出容器
+                this.alpha -= 0.02; 
             }
         }
 
         function spark() {
-            // 定位發射點：精準定位在蛋糕上方仙女棒火苗的位置 (畫布中心點附近)
             const startX = canvas.width / 2;
-            const startY = canvas.height - 115; // 仙女棒頂端的相對高度
-
+            const startY = canvas.height - 115; 
             const color = colors[Math.floor(Math.random() * colors.length)];
-            // 每 0.2 秒噴發出 8 顆小碎火
             for (let i = 0; i < 8; i++) {
                 particles.push(new Particle(startX, startY, color));
             }
         }
 
-        // 高頻率噴發，模擬仙女棒燃燒
         fireworkInterval = setInterval(spark, 200);
 
         function loop() {
-            // 清除畫布並留下淡淡殘影
             ctx.fillStyle = 'rgba(45, 45, 45, 0.2)'; 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
