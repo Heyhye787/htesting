@@ -6,10 +6,10 @@
     <title>2026 雙重人格與星盤潛意識能量分析</title>
     <style>
         :root {
-            --bg-color: #1a1a1a;
+            --bg-color: #121212; /* 加深底色，讓背景與煙火對比更強烈 */
             --text-color: #e0e0e0;
             --accent-color: #64ffda;
-            --card-bg: #2d2d2d;
+            --card-bg: rgba(45, 45, 45, 0.85); /* 💡 關鍵：半透明卡片，讓後方的煙火若隱若現 */
         }
 
         body {
@@ -28,6 +28,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* 🎆 智慧圖層定位：煙火在網頁最底層與卡片中間 */
         #fireworks-canvas {
             position: fixed;
             top: 0;
@@ -35,7 +36,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none; 
-            z-index: 0;
+            z-index: 1; /* 💡 圖層 1：位於背景之上，卡片與蛋糕之下 */
         }
 
         .container {
@@ -47,7 +48,8 @@
             width: 100%;
             border: 1px solid #444;
             box-sizing: border-box;
-            z-index: 1;
+            backdrop-filter: blur(6px); /* 讓半透明卡片帶有唯美的毛玻璃濾鏡 */
+            z-index: 2; /* 💡 圖層 2：卡片位於煙火上方 */
             position: relative;
         }
 
@@ -67,7 +69,7 @@
         .input-field {
             width: 100%;
             padding: 14px;
-            background-color: #222;
+            background-color: #1a1a1a;
             border: 1px solid #555;
             color: #fff;
             border-radius: 8px;
@@ -142,7 +144,7 @@
         }
 
         .blessing {
-            background-color: #222;
+            background-color: #1a1a1a;
             padding: 18px;
             border-left: 4px solid var(--accent-color);
             margin-top: 20px;
@@ -152,7 +154,7 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 蛋糕置中排版 --- */
+        /* --- 🍓 蛋糕置中排版與最高圖層 --- */
         .cake-container {
             display: flex !important;
             flex-direction: column;
@@ -163,7 +165,7 @@
             height: 140px;
             position: relative;
             animation: fadeInCake 2s ease forwards;
-            z-index: 1;
+            z-index: 3; /* 💡 圖層 3：蛋糕處於絕對的最表層，凌駕於卡片與煙火之上 */
         }
 
         .flame {
@@ -183,7 +185,7 @@
             background-size: 10px 10px;
             border-radius: 2px;
             margin-bottom: -6px; 
-            z-index: 3;
+            z-index: 5;
         }
 
         .strawberry {
@@ -193,7 +195,7 @@
             border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
             position: relative;
             margin-bottom: -4px; 
-            z-index: 2;
+            z-index: 4;
             box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15);
         }
         .strawberry::before {
@@ -217,7 +219,7 @@
                 #6272a4 60%, #6272a4 100%   
             );
             border-radius: 12px 12px 2px 2px;
-            z-index: 1;
+            z-index: 3;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
@@ -337,7 +339,6 @@
         }
     }
 
-    // 💡 升級版：嚴格生日防呆驗證
     function validateBirthday() {
         const input = document.getElementById('birthday-input').value.trim();
         const pureNumbers = input.replace(/\D/g, '');
@@ -346,32 +347,22 @@
             alert('請輸入你的西元出生年月日以利數據分析！');
             return;
         }
-        
-        // 1. 檢查數字總長度是否滿足 8 位
         if (pureNumbers.length < 8) {
             alert('出生年月日格式不夠完整喔！\n請輸入完整的 8 位數字，例如：19980101');
             return;
         }
-        
-        // 拆分年、月、日來進行合法性比對
         const year = parseInt(pureNumbers.substring(0, 4), 10);
         const month = parseInt(pureNumbers.substring(4, 6), 10);
         const day = parseInt(pureNumbers.substring(6, 8), 10);
-        
-        // 2. 驗證月份 (1 - 12 月)
         if (month < 1 || month > 12) {
             alert('偵測到無效的星盤月份！\n請確認月份輸入是否正確（應為 01 至 12）。');
             return;
         }
-        
-        // 3. 驗證日期 (1 - 31 日，並根據月份動態抓取最大天數)
         const maxDaysInMonth = new Date(year, month, 0).getDate();
         if (day < 1 || day > maxDaysInMonth) {
             alert(`偵測到無效的星盤日期！\n請確認輸入的日期是否正確（該月份最大天數為 ${maxDaysInMonth} 日）。`);
             return;
         }
-        
-        // 通過所有驗證，進入下一關
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('q1').classList.remove('hidden');
         window.scrollTo(0, 0); 
@@ -436,7 +427,7 @@
         }
     }
 
-    /* --- 🎆 智慧鎖定：全螢幕高畫質·蛋糕局部定位煙火引擎 --- */
+    /* --- 🎆 智慧定位：全螢幕高畫質·蛋糕背景鎖定煙火引擎 --- */
     let fireworkInterval;
     function initSmartFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
@@ -489,8 +480,9 @@
             const cakeCenterX = rect.left + (rect.width / 2);
             const cakeCenterY = rect.top + (rect.height / 2);
 
-            const x = cakeCenterX + (Math.random() * 160 - 80); 
-            const y = (cakeCenterY - 60) + (Math.random() * 100 - 50);
+            // 精準控制：讓大煙火主要在蛋糕上方 60px 的周圍炸開
+            const x = cakeCenterX + (Math.random() * 120 - 60); 
+            const y = (cakeCenterY - 60) + (Math.random() * 80 - 40);
 
             const color = colors[Math.floor(Math.random() * colors.length)];
             
@@ -506,7 +498,8 @@
         setTimeout(createTargetedFirework, 400);
 
         function loop() {
-            ctx.fillStyle = 'rgba(26, 26, 26, 0.18)';
+            // 優雅的黑色半透明覆蓋，保留絕美煙火殘影
+            ctx.fillStyle = 'rgba(18, 18, 18, 0.18)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             particles.forEach((p, index) => {
