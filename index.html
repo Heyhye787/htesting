@@ -206,12 +206,12 @@
 
 <div class="container">
     <div id="start-page">
-        <h2>♊ 雙重人格與星盤潛意識能量分析</h2>
-        <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析「外在社交能力極強、內心邊界感極深」的複合型人格。</p>
+        <h2>星座與星盤潛意識能量分析</h2>
+        <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析複合型人格。</p>
         
         <div class="input-group">
             <label style="color: var(--accent-color); display: block; margin-bottom: 8px; font-size: 0.95rem;">請輸入你的西元出生年月日：</label>
-            <input type="text" id="birthday-input" class="input-field" placeholder="範例：1998/06/01" onkeypress="handleKeyPress(event)">
+            <input type="text" id="birthday-input" class="input-field" placeholder="範例：1998/01/01" onkeypress="handleKeyPress(event)">
         </div>
         
         <p style="color: #888; font-size: 0.85rem; line-height: 1.4;">* 系統將根據出生年月日精準定位你的原始星盤核心能量。</p>
@@ -219,7 +219,7 @@
     </div>
 
     <div id="q1" class="hidden">
-        <h2>Q1. 當你身處熱鬧的百人大型聚會時，你最常出現的狀態是？</h2>
+        <h2>Q1. 當你身處熱鬧的大型聚會時，你最常出現的狀態是？</h2>
         <button class="btn" onclick="nextQuestion(2)">A. 靈魂出竅，表面在笑，內心其實在想等一下宵夜要吃什麼</button>
         <button class="btn" onclick="nextQuestion(2)">B. 八面玲瓏，展現滿分的社交人設，跟誰都能打成一片</button>
         <button class="btn" onclick="nextQuestion(2)">C. 以上皆是。前半段是熱情交際花，後半段電量耗盡只想原地隱形</button>
@@ -242,8 +242,8 @@
     <div id="q4" class="hidden">
         <h2>Q4. 最終星盤比對：請選擇目前最符合你當下狀態的描述？</h2>
         <button class="btn" onclick="startLoading()">A. 雖然今天生日，但我本來打算低調混過去的...</button>
-        <button class="btn" onclick="startLoading()">B. 這個測驗有點東西，把我體內的雙子座靈魂摸得滿透的</button>
-        <button class="btn" onclick="startLoading()">C. 猜到是你在搞鬼了，但我承認這個慶生方式有驚艷到我</button>
+        <button class="btn" onclick="startLoading()">B. 這個測驗有點東西，把我體內的靈魂摸得滿透的</button>
+        <button class="btn" onclick="startLoading()">C. 猜到是你在搞鬼了</button>
     </div>
 
     <div id="loading-page" class="hidden">
@@ -318,10 +318,6 @@
             "> 擷取雙子座雙重人格參數...",
             "> 正在過濾表面的「社交大師」假象...",
             "> 偵測到核心區域：【拒絕無聊、極度怕累、精準留白】...",
-            "> 系統自動切換為【高智商低調守護模式】...",
-            "> 成功屏蔽流於形式的尷尬祝福... [OK]",
-            "> 成功攔截消耗電量的百人聚會信號... [OK]",
-            "> 正在為「渴望高質量陪伴」的雙子生成真心話...",
             "> 分析完成。載入最終報告。"
         ];
 
@@ -349,8 +345,8 @@
             document.body.innerHTML = `
                 <div style="text-align: center; color: #444; font-family: monospace; padding-top: 20vh; padding-left: 15px; padding-right: 15px;">
                     <h2>[ 紀錄已完全銷毀 ]</h2>
-                    <p>網頁緩存已清除，雙子座的社交防禦牆已重建。</p>
-                    <p>生日快樂！快去陪你在意的人，或者好好享受無人打擾的自由吧：）</p>
+                    <p>網頁緩存已清除。</p>
+                    <p>生日快樂！ ：）</p>
                 </div>
             `;
         }
