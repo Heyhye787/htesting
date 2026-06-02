@@ -28,6 +28,17 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* 煙火畫布：維持全螢幕，這樣大煙火炸開的碎屑才不會被切斷 */
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            z-index: 0;
+        }
+
         .container {
             background-color: var(--card-bg);
             padding: 25px 20px;
@@ -142,36 +153,16 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 大草莓雙層蛋糕與局部畫布結構 --- */
-        .cake-wrapper {
-            position: relative;
-            width: 100%;
-            height: 180px; 
-            margin: 35px 0 25px 0;
-        }
-
-        #fireworks-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2; 
-        }
-
+        /* --- 🍓 蛋糕回歸最安全的垂直置中排版 --- */
         .cake-container {
             display: flex !important;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
+            margin: 40px auto 25px auto;
             width: 160px;
             height: 140px;
-            margin: 0 auto;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
             animation: fadeInCake 2s ease forwards;
             z-index: 1;
         }
@@ -251,6 +242,8 @@
 </head>
 <body>
 
+<canvas id="fireworks-canvas"></canvas>
+
 <div class="container">
     <div id="start-page">
         <h2>星座與星盤潛意識能量分析</h2>
@@ -316,14 +309,11 @@
             不管未來的局勢怎麼變，都希望妳新的一歲依然能保持聰明、閃耀、活得像風一樣自由。生日快樂！
         </div>
 
-        <div class="cake-wrapper">
-            <canvas id="fireworks-canvas"></canvas>
-            <div class="cake-container">
-                <div class="flame"></div>
-                <div class="candle"></div>
-                <div class="strawberry"></div>
-                <div class="cake"></div>
-            </div>
+        <div id="my-cake" class="cake-container">
+            <div class="flame"></div>
+            <div class="candle"></div>
+            <div class="strawberry"></div>
+            <div class="cake"></div>
         </div>
 
         <button class="btn destroy-btn" style="margin-top: 15px;" onclick="destroyPage()">[ 關閉網頁並銷毀本紀錄 ]</button>
@@ -331,18 +321,13 @@
 </div>
 
 <script>
-    // 💡 核心防呆：盲打自動切換格式功能
     function formatBirthday(input) {
-        // 先把所有不是數字的字元全部濾掉
         let value = input.value.replace(/\D/g, '');
-        
-        // 根據數字長度，動態安插斜線
         if (value.length > 4 && value.length <= 6) {
             value = value.replace(/^(\d{4})(\d+)/, '$1/$2');
         } else if (value.length > 6) {
             value = value.replace(/^(\d{4})(\d{2})(\d+)/, '$1/$2/$3');
         }
-        
         input.value = value;
     }
 
@@ -353,23 +338,17 @@
         }
     }
 
-    // 💡 提交防呆驗證
     function validateBirthday() {
         const input = document.getElementById('birthday-input').value.trim();
-        // 移除非數字字元來計算真正長度
         const pureNumbers = input.replace(/\D/g, '');
-        
         if (input === '') {
             alert('請輸入你的西元出生年月日以利數據分析！');
             return;
         }
-        
-        // 如果輸入的數字不夠完整（少於6位數，例如至少要打 980101 或 19980101）
         if (pureNumbers.length < 6) {
             alert('請輸入完整的出生年月日格式喔！\n範例：19980101');
             return;
         }
-        
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('q1').classList.remove('hidden');
         window.scrollTo(0, 0); 
@@ -412,7 +391,7 @@
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
                     window.scrollTo(0, 0);
-                    initLocalFireworks(); 
+                    initSmartFireworks(); // 啟動精準鎖定蛋糕的絢麗大煙火！
                 }, 800);
             }
         }, 400);
@@ -421,6 +400,9 @@
     function destroyPage() {
         if(confirm("確定要銷毀此紀錄嗎？（銷毀後不可復原）")) {
             if(fireworkInterval) clearInterval(fireworkInterval);
+            const canvas = document.getElementById('fireworks-canvas');
+            if(canvas) canvas.style.display = 'none';
+
             document.body.innerHTML = `
                 <div style="text-align: center; color: #444; font-family: monospace; padding-top: 20vh; padding-left: 15px; padding-right: 15px;">
                     <h2>[ 紀錄已完全銷毀 ]</h2>
@@ -431,21 +413,22 @@
         }
     }
 
-    /* --- 🎆 仙女棒局部煙火粒子引擎 --- */
+    /* --- 🎆 智慧鎖定：全螢幕高畫質·蛋糕局部定位煙火引擎 --- */
     let fireworkInterval;
-    function initLocalFireworks() {
+    function initSmartFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
-        const wrapper = canvas.parentElement;
         const ctx = canvas.getContext('2d');
+        const cake = document.getElementById('my-cake');
 
         function resizeCanvas() {
-            canvas.width = wrapper.clientWidth;
-            canvas.height = wrapper.clientHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
         resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
         let particles = [];
-        const colors = ['#64ffda', '#ff79c6', '#ffb86c', '#ff5555', '#f1fa8c', '#bd93f9'];
+        const colors = ['#64ffda', '#ff79c6', '#ffb86c', '#ff5555', '#f1fa8c', '#bd93f9', '#50fa7b'];
 
         class Particle {
             constructor(x, y, color) {
@@ -453,19 +436,19 @@
                 this.y = y;
                 this.color = color;
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 2 + 0.5; 
+                const speed = Math.random() * 3.5 + 1; // 完美的爆炸擴散速度
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - 1; 
+                this.vy = Math.sin(angle) * speed;
                 this.alpha = 1;
-                this.gravity = 0.06; 
+                this.gravity = 0.04; // 細緻的自然下墜效果
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); // 完美清晰的大煙火粒子
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 6;
+                ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
@@ -474,24 +457,42 @@
                 this.x += this.vx;
                 this.y += this.vy;
                 this.vy += this.gravity;
-                this.alpha -= 0.02; 
+                this.alpha -= 0.015;
             }
         }
 
-        function spark() {
-            const startX = canvas.width / 2;
-            const startY = canvas.height - 115; 
+        // 💡 核心演算法：即時抓取蛋糕的手機定位，並在周圍引爆煙火
+        function createTargetedFirework() {
+            const rect = cake.getBoundingClientRect();
+            
+            // 計算蛋糕在目前手機螢幕上的中心點 X 和 Y
+            const cakeCenterX = rect.left + (rect.width / 2);
+            const cakeCenterY = rect.top + (rect.height / 2);
+
+            // 讓爆炸中心在蛋糕上方 30px ~ 周圍 80px 的精準範圍內亂數跳動
+            const x = cakeCenterX + (Math.random() * 160 - 80); 
+            const y = (cakeCenterY - 60) + (Math.random() * 100 - 50);
+
             const color = colors[Math.floor(Math.random() * colors.length)];
-            for (let i = 0; i < 8; i++) {
-                particles.push(new Particle(startX, startY, color));
+            
+            // 每發擁有 55 顆飽滿粒子
+            for (let i = 0; i < 55; i++) {
+                particles.push(new Particle(x, y, color));
             }
         }
 
-        fireworkInterval = setInterval(spark, 200);
+        // 每 0.6 秒不間斷在蛋糕周圍連發彩色大煙火！
+        fireworkInterval = setInterval(createTargetedFirework, 600);
+        
+        // 進去瞬間立刻三連發
+        createTargetedFirework();
+        setTimeout(createTargetedFirework, 200);
+        setTimeout(createTargetedFirework, 400);
 
         function loop() {
-            ctx.fillStyle = 'rgba(45, 45, 45, 0.2)'; 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 優雅的黑色半透明覆蓋，保留絕美煙火殘影
+            ctx.fillStyle = 'rgba(26, 26, 26, 0.18)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             particles.forEach((p, index) => {
                 p.update();
