@@ -154,16 +154,18 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 蛋糕舞台：採用絕對不會位移的置中架構 --- */
+        /* --- 🎂 終極修正：物理防震、絕對置中舞台 --- */
         .cake-wrapper {
             position: relative;
             width: 100%;
-            height: 200px; /* 給上方留出更多隨機煙火的舞台空間 */
+            height: 200px; 
             margin: 35px 0 25px 0;
-            text-align: center;
+            /* 用最純粹的 Flexbox 強制所有子元素在中央疊加，完全免疫任何位移 Bug */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-end !important;
         }
 
-        /* 煙火畫布：覆蓋整個蛋糕舞台，且層級在最前面 */
         #fireworks-canvas {
             position: absolute;
             top: 0;
@@ -174,18 +176,15 @@
             z-index: 4; 
         }
 
-        /* 蛋糕容器：使用不可撼動的絕對置中 */
+        /* 蛋糕容器：拿掉 translateX，完全靠父層 Flex 置中，穩如泰山 */
         .cake-container {
-            display: inline-flex !important; /* 確保水平完美居中 */
+            display: flex !important;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
             width: 160px;
             height: 140px;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
             animation: fadeInCake 2s ease forwards;
             z-index: 3; 
         }
@@ -365,6 +364,7 @@
         }
     }
 
+    // 手機流暢報錯提示
     function showError(msg) {
         const errorBox = document.getElementById('error-box');
         if (msg === "") {
@@ -464,7 +464,7 @@
         `;
     }
 
-    /* --- 🎆 智慧重構：卡片內層·圍繞蛋糕隨機綻放煙火引擎 --- */
+    /* --- 🎆 智慧相對中心隨機煙火引擎 --- */
     let fireworkInterval;
     function initSmartFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
@@ -486,7 +486,7 @@
                 this.y = y;
                 this.color = color;
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 3 + 1; // 大煙火漂亮的擴散速度
+                const speed = Math.random() * 3 + 1; 
                 this.vx = Math.cos(angle) * speed;
                 this.vy = Math.sin(angle) * speed - 0.3; 
                 this.alpha = 1;
@@ -511,29 +511,23 @@
             }
         }
 
-        // 💡 智慧隨機演算法：擺脫複雜的手機座標抓取，改用穩定的相對畫布中心隨機發射
         function createLocalFirework() {
-            // 畫布的中心水平線就是置中蛋糕的位置
+            // 💡 物理置中：畫布的「正中間」就是蛋糕所在的位置
             const centerX = canvas.width / 2;
             
-            // 讓大煙火的爆炸中心 X 軸在蛋糕周圍（左 80px 到 右 80px）隨機跳動
-            const burstX = centerX + (Math.random() * 160 - 80);
-            
-            // 讓 Y 軸在蛋糕上方（高度 40px 到 120px 的夜空）隨機跳動，創造滿天連發感
-            const burstY = canvas.height - 140 - (Math.random() * 80);
+            // 讓煙火以正中央為基準，在周圍隨機綻放
+            const burstX = centerX + (Math.random() * 140 - 70);
+            const burstY = canvas.height - 130 - (Math.random() * 70);
 
             const color = colors[Math.floor(Math.random() * colors.length)];
             
-            // 每發有 45 顆高光彩色大粒子
             for (let i = 0; i < 45; i++) {
                 particles.push(new Particle(burstX, burstY, color));
             }
         }
 
-        // 每 0.5 秒在蛋糕周圍隨機連發彩色大煙火
         fireworkInterval = setInterval(createLocalFirework, 500);
         
-        // 進去瞬間立刻在不同隨機位置三連發
         createLocalFirework();
         setTimeout(createLocalFirework, 150);
         setTimeout(createLocalFirework, 300);
