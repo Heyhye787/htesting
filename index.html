@@ -6,10 +6,11 @@
     <title>2026 雙重人格與星盤潛意識能量分析</title>
     <style>
         :root {
-            --bg-color: #121212; /* 加深底色，讓背景與煙火對比更強烈 */
+            --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
             --accent-color: #64ffda;
-            --card-bg: rgba(45, 45, 45, 0.85); /* 💡 關鍵：半透明卡片，讓後方的煙火若隱若現 */
+            --card-bg: rgba(45, 45, 45, 0.85);
+            --error-color: #ff5555; /* 錯誤提示的亮紅色 */
         }
 
         body {
@@ -28,7 +29,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 🎆 智慧圖層定位：煙火在網頁最底層與卡片中間 */
         #fireworks-canvas {
             position: fixed;
             top: 0;
@@ -36,7 +36,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none; 
-            z-index: 1; /* 💡 圖層 1：位於背景之上，卡片與蛋糕之下 */
+            z-index: 1; 
         }
 
         .container {
@@ -48,8 +48,8 @@
             width: 100%;
             border: 1px solid #444;
             box-sizing: border-box;
-            backdrop-filter: blur(6px); /* 讓半透明卡片帶有唯美的毛玻璃濾鏡 */
-            z-index: 2; /* 💡 圖層 2：卡片位於煙火上方 */
+            backdrop-filter: blur(6px);
+            z-index: 2;
             position: relative;
         }
 
@@ -63,7 +63,7 @@
         }
 
         .input-group {
-            margin: 20px 0;
+            margin: 20px 0 5px 0; /* 縮小下方外距，留給錯誤提示 */
         }
 
         .input-field {
@@ -81,6 +81,18 @@
         .input-field:focus {
             border-color: var(--accent-color);
             outline: none;
+        }
+
+        /* 💡 手機專用：動態錯誤提示文字樣式 */
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            min-height: 18px; /* 撐開固定高度，防止文字跳出來時畫面抖動 */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            line-height: 1.4;
         }
 
         .btn {
@@ -154,7 +166,7 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 蛋糕置中排版與最高圖層 --- */
+        /* --- 🍓 蛋糕置中與最高圖層 --- */
         .cake-container {
             display: flex !important;
             flex-direction: column;
@@ -165,7 +177,7 @@
             height: 140px;
             position: relative;
             animation: fadeInCake 2s ease forwards;
-            z-index: 3; /* 💡 圖層 3：蛋糕處於絕對的最表層，凌駕於卡片與煙火之上 */
+            z-index: 3; 
         }
 
         .flame {
@@ -255,6 +267,8 @@
             <input type="text" id="birthday-input" class="input-field" placeholder="直接輸入數字，例如：19980101" oninput="formatBirthday(this)" onkeypress="handleKeyPress(event)" maxlength="10">
         </div>
         
+        <div id="error-box" class="error-message"></div>
+        
         <p style="color: #888; font-size: 0.85rem; line-height: 1.4;">* 系統將根據出生年月日精準定位你的原始星盤核心能量。</p>
         <button class="btn" style="text-align:center; background-color: var(--accent-color); color: #1a1a1a; font-weight: bold;" onclick="validateBirthday()">定位星盤並開始分析</button>
     </div>
@@ -323,6 +337,9 @@
 
 <script>
     function formatBirthday(input) {
+        // 當使用者在輸入時，自動隱藏紅色錯誤訊息
+        showError("");
+
         let value = input.value.replace(/\D/g, '');
         if (value.length > 4 && value.length <= 6) {
             value = value.replace(/^(\d{4})(\d+)/, '$1/$2');
@@ -339,30 +356,50 @@
         }
     }
 
+    // 💡 輔助函式：用來流暢顯示或隱藏錯誤訊息
+    function showError(msg) {
+        const errorBox = document.getElementById('error-box');
+        if (msg === "") {
+            errorBox.style.opacity = "0";
+            setTimeout(() => { if(errorBox.style.opacity === "0") errorBox.innerText = ""; }, 300);
+        } else {
+            errorBox.innerText = msg;
+            errorBox.style.opacity = "1";
+        }
+    }
+
+    // 💡 升級版：完全移除原廠 Alert 的手機動態防呆
     function validateBirthday() {
         const input = document.getElementById('birthday-input').value.trim();
         const pureNumbers = input.replace(/\D/g, '');
         
         if (input === '') {
-            alert('請輸入你的西元出生年月日以利數據分析！');
+            showError('⚠️ 請輸入出生年月日以利數據分析！');
             return;
         }
+        
         if (pureNumbers.length < 8) {
-            alert('出生年月日格式不夠完整喔！\n請輸入完整的 8 位數字，例如：19980101');
+            showError('⚠️ 格式不夠完整！請輸入 8 位數字（範例：19980101）');
             return;
         }
+        
         const year = parseInt(pureNumbers.substring(0, 4), 10);
         const month = parseInt(pureNumbers.substring(4, 6), 10);
         const day = parseInt(pureNumbers.substring(6, 8), 10);
+        
         if (month < 1 || month > 12) {
-            alert('偵測到無效的星盤月份！\n請確認月份輸入是否正確（應為 01 至 12）。');
+            showError('⚠️ 偵測到無效月份！請確認輸入是否在 01 至 12 之間。');
             return;
         }
+        
         const maxDaysInMonth = new Date(year, month, 0).getDate();
         if (day < 1 || day > maxDaysInMonth) {
-            alert(`偵測到無效的星盤日期！\n請確認輸入的日期是否正確（該月份最大天數為 ${maxDaysInMonth} 日）。`);
+            showError(`⚠️ 偵測到無效日期！該月份最大天數為 ${maxDaysInMonth} 日。`);
             return;
         }
+        
+        // 通過驗證，清除錯誤訊息並過場
+        showError("");
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('q1').classList.remove('hidden');
         window.scrollTo(0, 0); 
@@ -427,7 +464,7 @@
         }
     }
 
-    /* --- 🎆 智慧定位：全螢幕高畫質·蛋糕背景鎖定煙火引擎 --- */
+    /* --- 🎆 智慧鎖定煙火引擎 --- */
     let fireworkInterval;
     function initSmartFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
@@ -480,10 +517,8 @@
             const cakeCenterX = rect.left + (rect.width / 2);
             const cakeCenterY = rect.top + (rect.height / 2);
 
-            // 精準控制：讓大煙火主要在蛋糕上方 60px 的周圍炸開
             const x = cakeCenterX + (Math.random() * 120 - 60); 
             const y = (cakeCenterY - 60) + (Math.random() * 80 - 40);
-
             const color = colors[Math.floor(Math.random() * colors.length)];
             
             for (let i = 0; i < 55; i++) {
@@ -498,7 +533,6 @@
         setTimeout(createTargetedFirework, 400);
 
         function loop() {
-            // 優雅的黑色半透明覆蓋，保留絕美煙火殘影
             ctx.fillStyle = 'rgba(18, 18, 18, 0.18)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
