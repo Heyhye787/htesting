@@ -28,7 +28,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 煙火畫布：維持全螢幕，這樣大煙火炸開的碎屑才不會被切斷 */
         #fireworks-canvas {
             position: fixed;
             top: 0;
@@ -153,7 +152,7 @@
             border-radius: 0 8px 8px 0;
         }
 
-        /* --- 🍓 蛋糕回歸最安全的垂直置中排版 --- */
+        /* --- 🍓 蛋糕置中排版 --- */
         .cake-container {
             display: flex !important;
             flex-direction: column;
@@ -275,7 +274,7 @@
     <div id="q3" class="hidden">
         <h2>Q3. 關於感情與生活，你最無法忍受的事情是什麼？</h2>
         <button class="btn" onclick="nextQuestion(4)">A. 生活一成不變，缺乏新鮮感與有趣的靈魂</button>
-        <button class="btn" onclick="nextQuestion(4)">B. 雖然身邊從不缺桃花和關注，但對方根本不懂我內心的寂寞</button>
+        <button class="btn" onclick="nextQuestion(4)">B. 身邊從不缺桃花和關注，但對方根本不懂我內心的寂寞</button>
         <button class="btn" onclick="nextQuestion(4)">C. 被沒必要的社交儀式和人情世故綁架</button>
     </div>
 
@@ -338,17 +337,41 @@
         }
     }
 
+    // 💡 升級版：嚴格生日防呆驗證
     function validateBirthday() {
         const input = document.getElementById('birthday-input').value.trim();
         const pureNumbers = input.replace(/\D/g, '');
+        
         if (input === '') {
             alert('請輸入你的西元出生年月日以利數據分析！');
             return;
         }
-        if (pureNumbers.length < 6) {
-            alert('請輸入完整的出生年月日格式喔！\n範例：19980101');
+        
+        // 1. 檢查數字總長度是否滿足 8 位
+        if (pureNumbers.length < 8) {
+            alert('出生年月日格式不夠完整喔！\n請輸入完整的 8 位數字，例如：19980101');
             return;
         }
+        
+        // 拆分年、月、日來進行合法性比對
+        const year = parseInt(pureNumbers.substring(0, 4), 10);
+        const month = parseInt(pureNumbers.substring(4, 6), 10);
+        const day = parseInt(pureNumbers.substring(6, 8), 10);
+        
+        // 2. 驗證月份 (1 - 12 月)
+        if (month < 1 || month > 12) {
+            alert('偵測到無效的星盤月份！\n請確認月份輸入是否正確（應為 01 至 12）。');
+            return;
+        }
+        
+        // 3. 驗證日期 (1 - 31 日，並根據月份動態抓取最大天數)
+        const maxDaysInMonth = new Date(year, month, 0).getDate();
+        if (day < 1 || day > maxDaysInMonth) {
+            alert(`偵測到無效的星盤日期！\n請確認輸入的日期是否正確（該月份最大天數為 ${maxDaysInMonth} 日）。`);
+            return;
+        }
+        
+        // 通過所有驗證，進入下一關
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('q1').classList.remove('hidden');
         window.scrollTo(0, 0); 
@@ -391,7 +414,7 @@
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
                     window.scrollTo(0, 0);
-                    initSmartFireworks(); // 啟動精準鎖定蛋糕的絢麗大煙火！
+                    initSmartFireworks(); 
                 }, 800);
             }
         }, 400);
@@ -436,17 +459,17 @@
                 this.y = y;
                 this.color = color;
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 3.5 + 1; // 完美的爆炸擴散速度
+                const speed = Math.random() * 3.5 + 1; 
                 this.vx = Math.cos(angle) * speed;
                 this.vy = Math.sin(angle) * speed;
                 this.alpha = 1;
-                this.gravity = 0.04; // 細緻的自然下墜效果
+                this.gravity = 0.04; 
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); // 完美清晰的大煙火粒子
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); 
                 ctx.fillStyle = this.color;
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
@@ -461,36 +484,28 @@
             }
         }
 
-        // 💡 核心演算法：即時抓取蛋糕的手機定位，並在周圍引爆煙火
         function createTargetedFirework() {
             const rect = cake.getBoundingClientRect();
-            
-            // 計算蛋糕在目前手機螢幕上的中心點 X 和 Y
             const cakeCenterX = rect.left + (rect.width / 2);
             const cakeCenterY = rect.top + (rect.height / 2);
 
-            // 讓爆炸中心在蛋糕上方 30px ~ 周圍 80px 的精準範圍內亂數跳動
             const x = cakeCenterX + (Math.random() * 160 - 80); 
             const y = (cakeCenterY - 60) + (Math.random() * 100 - 50);
 
             const color = colors[Math.floor(Math.random() * colors.length)];
             
-            // 每發擁有 55 顆飽滿粒子
             for (let i = 0; i < 55; i++) {
                 particles.push(new Particle(x, y, color));
             }
         }
 
-        // 每 0.6 秒不間斷在蛋糕周圍連發彩色大煙火！
         fireworkInterval = setInterval(createTargetedFirework, 600);
         
-        // 進去瞬間立刻三連發
         createTargetedFirework();
         setTimeout(createTargetedFirework, 200);
         setTimeout(createTargetedFirework, 400);
 
         function loop() {
-            // 優雅的黑色半透明覆蓋，保留絕美煙火殘影
             ctx.fillStyle = 'rgba(26, 26, 26, 0.18)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
