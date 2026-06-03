@@ -143,7 +143,6 @@
             margin-bottom: 10px;
         }
 
-        /* --- 💌 祝福信件（初始隱藏，切蛋糕後展開） --- */
         .blessing {
             background-color: #1a1a1a;
             padding: 18px;
@@ -160,7 +159,7 @@
         }
 
         .blessing.reveal {
-            max-height: 1000px; /* 動態展開 */
+            max-height: 1000px;
             opacity: 1;
         }
 
@@ -168,7 +167,7 @@
         .cake-wrapper {
             position: relative;
             width: 100%;
-            height: 180px; 
+            height: 200px; 
             margin: 25px 0;
             display: flex;
             justify-content: center;
@@ -182,36 +181,35 @@
             width: 100%;
             height: 100%;
             pointer-events: none; 
-            z-index: 4; 
+            z-index: 10; 
         }
 
-        /* 蛋糕主體外殼，點擊觸發互動 */
         .cake-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            width: 180px;
-            height: 140px;
+            width: 200px;
+            height: 160px;
             position: relative;
             cursor: pointer;
-            z-index: 3; 
+            z-index: 5; 
             transition: transform 0.3s ease;
         }
 
         .cake-container:hover {
-            transform: scale(1.03);
+            transform: scale(1.05);
         }
 
-        /* 提示戳一下的手勢文字 */
         .cake-hint {
             position: absolute;
-            top: -30px;
+            top: -20px;
             color: #f1fa8c;
             font-size: 0.85rem;
             letter-spacing: 1px;
             animation: bounce 1.5s infinite;
             white-space: nowrap;
+            z-index: 6;
         }
 
         @keyframes bounce {
@@ -219,104 +217,142 @@
             50% { transform: translateY(-5px); }
         }
 
+        /* 頂部火光 */
         .flame {
             width: 8px;
-            height: 10px;
+            height: 12px;
             background: #fff;
             border-radius: 50% 50% 20% 20%;
-            margin-bottom: 2px;
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
             animation: flicker 0.1s infinite alternate;
             box-shadow: 0 0 10px #ffb86c, 0 0 20px #ff5555, 0 0 30px #f1fa8c;
-            transition: opacity 0.3s;
+            z-index: 9;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
+        /* 蠟燭 */
         .candle {
             width: 6px;
-            height: 30px;
+            height: 35px;
             background: linear-gradient(45deg, #ff5555 25%, #ffffff 25%, #ffffff 50%, #ff5555 50%, #ff5555 75%, #ffffff 75%, #ffffff 100%);
             background-size: 10px 10px;
             border-radius: 2px;
-            margin-bottom: -6px; 
-            z-index: 5;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 8;
+            transition: opacity 0.3s ease, transform 0.4s ease;
         }
 
+        /* 草莓 */
         .strawberry {
-            width: 24px;
-            height: 26px;
+            width: 26px;
+            height: 28px;
             background-color: #ff4466;
             border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
-            position: relative;
-            margin-bottom: -4px; 
-            z-index: 4;
+            position: absolute;
+            top: 52px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 7;
             box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15);
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s ease, transform 0.4s ease;
         }
         .strawberry::before {
             content: '';
             position: absolute;
             top: -2px;
-            left: 5px;
+            left: 6px;
             width: 14px;
             height: 4px;
             background-color: #50fa7b;
             border-radius: 50%;
         }
 
-        /* 蛋糕主體左右切開動畫 */
+        /* 蛋糕主體：左右切開結構 */
         .cake-parts {
             display: flex;
-            width: 130px;
-            height: 65px;
+            width: 140px;
+            height: 75px;
             position: relative;
-            z-index: 3;
+            z-index: 4;
+            background: transparent;
         }
 
+        /* 重新定義蛋糕左右部分的漸層，使其融合在一起 */
         .cake-left, .cake-right {
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 75px;
+            position: relative;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+        }
+
+        .cake-left {
             background: linear-gradient(to bottom, 
                 #ffffff 0%, #ffffff 15%,     
                 #ffb86c 15%, #ffb86c 50%,   
                 #ff79c6 50%, #ff79c6 60%,   
                 #6272a4 60%, #6272a4 100%   
             );
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .cake-left {
-            border-radius: 12px 0 0 2px;
+            border-radius: 12px 0 0 4px;
             transform-origin: left bottom;
         }
 
         .cake-right {
-            border-radius: 0 12px 2px 0;
+            background: linear-gradient(to bottom, 
+                #ffffff 0%, #ffffff 15%,     
+                #ffb86c 15%, #ffb86c 50%,   
+                #ff79c6 50%, #ff79c6 60%,   
+                #6272a4 60%, #6272a4 100%   
+            );
+            border-radius: 0 12px 4px 0;
             transform-origin: right bottom;
         }
 
-        /* --- 🔪 切開後的狀態樣式 --- */
-        .cake-container.cut .cake-left {
-            transform: translateX(-25px) rotate(-5deg);
+        /* 底部金屬盤子，增加立體陰影 */
+        .plate-line {
+            width: 170px;
+            height: 8px;
+            background-color: #444;
+            border-radius: 4px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: opacity 0.5s ease;
         }
-        .cake-container.cut .cake-right {
-            transform: translateX(25px) rotate(5deg);
-        }
-        .cake-container.cut .strawberry {
-            transform: translateY(15px) scale(0);
-            opacity: 0;
+
+        /* --- 🔪 切開後的狀態（強制將火光、蠟燭、草莓完全隱藏與移開） --- */
+        .cake-container.cut .flame {
+            opacity: 0 !important;
+            transform: translateX(-50%) scale(0) !important;
         }
         .cake-container.cut .candle {
-            transform: translateY(25px) scale(0);
-            opacity: 0;
+            opacity: 0 !important;
+            transform: translateX(-50%) translateY(30px) scale(0) !important;
         }
-        .cake-container.cut .flame {
-            opacity: 0;
+        .cake-container.cut .strawberry {
+            opacity: 0 !important;
+            transform: translateX(-50%) translateY(20px) scale(0) !important;
+        }
+        
+        /* 蛋糕主體分開動畫 */
+        .cake-container.cut .cake-left {
+            transform: translateX(-35px) rotate(-8deg);
+        }
+        .cake-container.cut .cake-right {
+            transform: translateX(35px) rotate(8deg);
         }
 
         @keyframes flicker {
-            0% { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(1.3); opacity: 1; }
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.2); opacity: 1; }
         }
 
         .destroy-btn {
@@ -331,7 +367,7 @@
 
 <div class="container">
     <div id="start-page">
-        <h2>星座潛意識能量分析</h2>
+        <h2>星座潛意識能量 analysis</h2>
         <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析複合型人格。</p>
         
         <div class="input-group">
@@ -442,6 +478,7 @@
                     <div class="cake-left"></div>
                     <div class="cake-right"></div>
                 </div>
+                <div class="plate-line"></div>
             </div>
         </div>
 
@@ -560,30 +597,28 @@
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
                     window.scrollTo(0, 0);
-                    // 這裡先不播煙火，等切蛋糕才播
                 }, 800);
             }
         }, 400);
     }
 
-    // --- 🍓 新增：點擊切蛋糕的互動函式 ---
     let hasCut = false;
     function clickCutCake() {
-        if(hasCut) return; // 只能切一次
+        if(hasCut) return; 
         hasCut = true;
 
         const cakeContainer = document.getElementById('my-cake');
         const cakePrompt = document.getElementById('cake-prompt');
         const blessingCard = document.getElementById('blessing-card');
 
-        // 加上切開的 CSS 類名（觸發左右分開、草莓蠟燭消失動畫）
+        // 觸發切開與隱藏動畫
         cakeContainer.classList.add('cut');
         cakePrompt.style.display = 'none';
 
-        // 觸發煙火效果
+        // 啟動煙火
         initSmartFireworks();
 
-        // 溫暖信件緩緩展開滑出，並平滑滾動到信件視角
+        // 信件滑出
         setTimeout(() => {
             blessingCard.classList.add('reveal');
             setTimeout(() => {
@@ -602,7 +637,6 @@
         `;
     }
 
-    /* --- 🎆 智慧相對中心隨機煙火引擎 --- */
     let fireworkInterval;
     function initSmartFireworks() {
         const canvas = document.getElementById('fireworks-canvas');
