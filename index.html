@@ -143,6 +143,7 @@
             margin-bottom: 10px;
         }
 
+        /* --- 💌 祝福信件（初始隱藏，切蛋糕後展開） --- */
         .blessing {
             background-color: #1a1a1a;
             padding: 18px;
@@ -152,17 +153,26 @@
             color: #f1fa8c;
             font-size: 0.95rem;
             border-radius: 0 8px 8px 0;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
+        }
+
+        .blessing.reveal {
+            max-height: 1000px; /* 動態展開 */
+            opacity: 1;
         }
 
         /* --- 🍓 蛋糕舞台置中架構 --- */
         .cake-wrapper {
             position: relative;
             width: 100%;
-            height: 200px; 
-            margin: 35px 0 25px 0;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: flex-end !important;
+            height: 180px; 
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
         }
 
         #fireworks-canvas {
@@ -175,36 +185,60 @@
             z-index: 4; 
         }
 
+        /* 蛋糕主體外殼，點擊觸發互動 */
         .cake-container {
-            display: flex !important;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            width: 160px;
+            width: 180px;
             height: 140px;
             position: relative;
-            animation: fadeInCake 2s ease forwards;
+            cursor: pointer;
             z-index: 3; 
+            transition: transform 0.3s ease;
+        }
+
+        .cake-container:hover {
+            transform: scale(1.03);
+        }
+
+        /* 提示戳一下的手勢文字 */
+        .cake-hint {
+            position: absolute;
+            top: -30px;
+            color: #f1fa8c;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            animation: bounce 1.5s infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .flame {
             width: 8px;
-            height: 8px;
+            height: 10px;
             background: #fff;
-            border-radius: 50%;
+            border-radius: 50% 50% 20% 20%;
             margin-bottom: 2px;
             animation: flicker 0.1s infinite alternate;
             box-shadow: 0 0 10px #ffb86c, 0 0 20px #ff5555, 0 0 30px #f1fa8c;
+            transition: opacity 0.3s;
         }
 
         .candle {
-            width: 5px;
+            width: 6px;
             height: 30px;
             background: linear-gradient(45deg, #ff5555 25%, #ffffff 25%, #ffffff 50%, #ff5555 50%, #ff5555 75%, #ffffff 75%, #ffffff 100%);
             background-size: 10px 10px;
             border-radius: 2px;
             margin-bottom: -6px; 
             z-index: 5;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .strawberry {
@@ -216,6 +250,7 @@
             margin-bottom: -4px; 
             z-index: 4;
             box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .strawberry::before {
             content: '';
@@ -228,8 +263,17 @@
             border-radius: 50%;
         }
 
-        .cake {
-            width: 120px;
+        /* 蛋糕主體左右切開動畫 */
+        .cake-parts {
+            display: flex;
+            width: 130px;
+            height: 65px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .cake-left, .cake-right {
+            width: 65px;
             height: 65px;
             background: linear-gradient(to bottom, 
                 #ffffff 0%, #ffffff 15%,     
@@ -237,19 +281,42 @@
                 #ff79c6 50%, #ff79c6 60%,   
                 #6272a4 60%, #6272a4 100%   
             );
-            border-radius: 12px 12px 2px 2px;
-            z-index: 3;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cake-left {
+            border-radius: 12px 0 0 2px;
+            transform-origin: left bottom;
+        }
+
+        .cake-right {
+            border-radius: 0 12px 2px 0;
+            transform-origin: right bottom;
+        }
+
+        /* --- 🔪 切開後的狀態樣式 --- */
+        .cake-container.cut .cake-left {
+            transform: translateX(-25px) rotate(-5deg);
+        }
+        .cake-container.cut .cake-right {
+            transform: translateX(25px) rotate(5deg);
+        }
+        .cake-container.cut .strawberry {
+            transform: translateY(15px) scale(0);
+            opacity: 0;
+        }
+        .cake-container.cut .candle {
+            transform: translateY(25px) scale(0);
+            opacity: 0;
+        }
+        .cake-container.cut .flame {
+            opacity: 0;
         }
 
         @keyframes flicker {
             0% { transform: scale(1); opacity: 0.9; }
             100% { transform: scale(1.3); opacity: 1; }
-        }
-
-        @keyframes fadeInCake {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .destroy-btn {
@@ -263,7 +330,6 @@
 <body>
 
 <div class="container">
-    <!-- 首頁 -->
     <div id="start-page">
         <h2>星座潛意識能量分析</h2>
         <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析複合型人格。</p>
@@ -279,7 +345,6 @@
         <button class="btn" style="text-align:center; background-color: var(--accent-color); color: #1a1a1a; font-weight: bold;" onclick="validateBirthday()">定位星盤並開始分析</button>
     </div>
 
-    <!-- Q1 -->
     <div id="q1" class="hidden">
         <h2>Q1. 遇到初次見面的人，你通常扮演什麼樣的角色？</h2>
         <button class="btn" onclick="nextQuestion(2)">A. 稍微有點被動，等待對方先開啟話題</button>
@@ -287,7 +352,6 @@
         <button class="btn" onclick="nextQuestion(2)">C. 表面上談笑風生，內心其實在默默觀察對方的細節</button>
     </div>
 
-    <!-- Q2 -->
     <div id="q2" class="hidden">
         <h2>Q2. 當你身處熱鬧的大型社交聚會時，你最常出現的真實狀態是？</h2>
         <button class="btn" onclick="nextQuestion(3)">A. 靈魂出竅，表面在笑，內心其實在想等一下宵夜要吃什麼</button>
@@ -295,7 +359,6 @@
         <button class="btn" onclick="nextQuestion(3)">C. 以上皆是。前半段是熱情交際花，後半段電量耗盡只想原地隱形</button>
     </div>
 
-    <!-- Q3 -->
     <div id="q3" class="hidden">
         <h2>Q3. 平時安排休假行程時，你更傾向哪一種生活型態？</h2>
         <button class="btn" onclick="nextQuestion(4)">A. 計畫趕不上變化，說走就走的未知冒險才有趣</button>
@@ -303,7 +366,6 @@
         <button class="btn" onclick="nextQuestion(4)">C. 待在家裡徹底與世隔絕，誰都不要來打擾我</button>
     </div>
 
-    <!-- Q4 -->
     <div id="q4" class="hidden">
         <h2>Q4. 當在生活中發現某個超好笑或很新奇的梗，你的第一反應是？</h2>
         <button class="btn" onclick="nextQuestion(5)">A. 默默點個讚，自己存在收藏夾裡就好</button>
@@ -311,7 +373,6 @@
         <button class="btn" onclick="nextQuestion(5)">C. 一秒傳給某個你心中特定、覺得他一定懂這個笑點的人</button>
     </div>
 
-    <!-- Q5 -->
     <div id="q5" class="hidden">
         <h2>Q5. 關於感情與生活，你目前最無法忍受的事情是什麼？</h2>
         <button class="btn" onclick="nextQuestion(6)">A. 生活一成不變，缺乏新鮮感與有趣的靈魂</button>
@@ -319,7 +380,6 @@
         <button class="btn" onclick="nextQuestion(6)">C. 被沒必要的社交儀式和人情世故綁架，覺得心累</button>
     </div>
 
-    <!-- Q6 -->
     <div id="q6" class="hidden">
         <h2>Q6. 如果今天有一個完全屬於你、不會被打擾的空閒夜晚，你最希望怎麼過？</h2>
         <button class="btn" onclick="nextQuestion(7)">A. 約一大群朋友去喝酒狂歡、夜唱或唱歌</button>
@@ -327,7 +387,6 @@
         <button class="btn" onclick="nextQuestion(7)">C. 一個人看電影、追劇，享受最高質量的孤獨</button>
     </div>
 
-    <!-- Q7 -->
     <div id="q7" class="hidden">
         <h2>Q7. 你認為自己在朋友眼中，通常是一個具備什麼特質的人？</h2>
         <button class="btn" onclick="nextQuestion(8)">A. 嘴硬心軟，雖然愛開玩笑但其實超級講義氣</button>
@@ -335,7 +394,6 @@
         <button class="btn" onclick="nextQuestion(8)">C. 神秘且難以捉摸，永遠猜不透你下一步在想什麼</button>
     </div>
 
-    <!-- Q8 -->
     <div id="q8" class="hidden">
         <h2>Q8. 如果要在「眾人圍繞的盛大慶生派對」和「跟特定在乎的人安靜度過」之間二選一？</h2>
         <button class="btn" onclick="nextQuestion(9)">A. 當然是盛大的派對，熱鬧過節才有儀式感！</button>
@@ -343,7 +401,6 @@
         <button class="btn" onclick="nextQuestion(9)">C. 看心情而定，但基本上目前更傾向把時間留給重要的人</button>
     </div>
 
-    <!-- Q9 -->
     <div id="q9" class="hidden">
         <h2>Q9. 面對自己真正重視、但局勢還有些不明朗的關係時，你的心態通常是？</h2>
         <button class="btn" onclick="nextQuestion(10)">A. 想太多、顧慮太多，結果不小心表現得有點忽冷忽熱</button>
@@ -351,7 +408,6 @@
         <button class="btn" onclick="nextQuestion(10)">C. 順其自然，默默等待對方的下一步動作</button>
     </div>
 
-    <!-- Q10 -->
     <div id="q10" class="hidden">
         <h2>Q10. 最終星盤核心驗證：請選擇目前最符合你當下狀態的描述？</h2>
         <button class="btn" onclick="startLoading()">A. 雖然今天生日，但我本來打算低調混過去的...</button>
@@ -359,13 +415,11 @@
         <button class="btn" onclick="startLoading()">C. 猜到是你在搞鬼了，但我承認這方式很有新意</button>
     </div>
 
-    <!-- 讀取中跑馬燈 -->
     <div id="loading-page" class="hidden">
         <h2>📊 雙子座星盤數據矩陣解碼中...</h2>
         <div id="loading-console"></div>
     </div>
 
-    <!-- 最終驚喜結果 -->
     <div id="result-page" class="hidden">
         <h2>🏆 分析結果出爐</h2>
         <div class="result-title">【風象星盤傳奇：披著社交外衣的孤獨風之子】</div>
@@ -377,29 +431,33 @@
             <li><strong>精準的情感偏好：</strong> 骨子裡其實很內向、怕累。在新的一歲裡，你內心深處最渴望的，其實是褪去所有社交面具，只跟那個「特定且在意的人」共享一段安靜、放鬆的高質量時光。</li>
         </ul>
 
-        <div class="blessing">
-        謝謝我們在今年相遇。雖然認識的時間還不算太長，但這陣子和你的互動、聊天，都是我生活中很亮眼的時刻。<br><br>
-        
-        前陣子聊天的時候有提到，你好像不喜歡太嘻嘩的生日，所以想說用這個方法。<br><br>
-        這是我第一次這樣認真準備幫別人過生日😂，也是第一次過你的生日。 所以這個特別的日子，我不想給你任何社交壓力和負擔。沒有喧鬧的人群，只有這個在螢幕另一端、默默為你亮起的微光小蛋糕。<br><br>
-        
-        今天，就把所有的顧慮和心累都先放下吧。祝你能順利跟你最在意、最能讓你放鬆的人（或者享受最舒適的個人時光）好好充個電。<br><br>
-        
-        不管未來的局勢怎麼變，都希望你新的一歲然能更往你嚮往的生活前進。 生日快樂！<br><br>
-        </div>
-
-        <!-- 🎂 完美置中大草莓雙層蛋糕舞台盒 -->
         <div class="cake-wrapper">
             <canvas id="fireworks-canvas"></canvas>
-            <div id="my-cake" class="cake-container">
+            <div id="my-cake" class="cake-container" onclick="clickCutCake()">
+                <div class="cake-hint" id="cake-prompt">👉 戳一下蛋糕切開驚喜 👈</div>
                 <div class="flame"></div>
                 <div class="candle"></div>
                 <div class="strawberry"></div>
-                <div class="cake"></div>
+                <div class="cake-parts">
+                    <div class="cake-left"></div>
+                    <div class="cake-right"></div>
+                </div>
             </div>
         </div>
 
-        <button class="btn destroy-btn" style="margin-top: 15px;" onclick="destroyPage()">[ 關閉網頁並銷毀本紀錄 ]</button>
+        <div id="blessing-card" class="blessing">
+            謝謝我們在今年相遇。雖然認識的時間還不算太長，但這陣子和你的互動、聊天，都是我生活中很亮眼的時刻。🌟<br><br>
+            
+            前陣子聊天的時候有提到，你好像不喜歡太嘻嘩的生日，所以想說用這個方法。😉<br><br>
+            
+            其實，這是我第一次這樣認真準備幫別人過生日😂，也是第一次過你的生日。所以這個特別的日子，我不想給你任何社交壓力和負擔。沒有喧鬧的人群，只有這個在螢幕另一端、默默為你亮起的微光小蛋糕。🕯️🎂<br><br>
+            
+            今天，就把所有的顧慮和心累都先放下吧。祝你能順利跟你最在意、最能讓你放鬆的人（或者享受最舒適的個人時光）好好充個電。🔋<br><br>
+            
+            不管未來的局勢怎麼變，都希望你新的一歲然能更往你嚮往的生活前進。 生日快樂！🎈
+        </div>
+
+        <button class="btn destroy-btn" style="margin-top: 25px;" onclick="destroyPage()">[ 關閉網頁並銷毀本紀錄 ]</button>
     </div>
 </div>
 
@@ -468,7 +526,6 @@
     }
 
     function nextQuestion(qNum) {
-        // 隱藏 Q1 ~ Q10 所有區塊
         for(let i=1; i<=10; i++) {
             document.getElementById('q' + i).classList.add('hidden');
         }
@@ -503,9 +560,35 @@
                     document.getElementById('loading-page').classList.add('hidden');
                     document.getElementById('result-page').classList.remove('hidden');
                     window.scrollTo(0, 0);
-                    initSmartFireworks(); 
+                    // 這裡先不播煙火，等切蛋糕才播
                 }, 800);
             }
+        }, 400);
+    }
+
+    // --- 🍓 新增：點擊切蛋糕的互動函式 ---
+    let hasCut = false;
+    function clickCutCake() {
+        if(hasCut) return; // 只能切一次
+        hasCut = true;
+
+        const cakeContainer = document.getElementById('my-cake');
+        const cakePrompt = document.getElementById('cake-prompt');
+        const blessingCard = document.getElementById('blessing-card');
+
+        // 加上切開的 CSS 類名（觸發左右分開、草莓蠟燭消失動畫）
+        cakeContainer.classList.add('cut');
+        cakePrompt.style.display = 'none';
+
+        // 觸發煙火效果
+        initSmartFireworks();
+
+        // 溫暖信件緩緩展開滑出，並平滑滾動到信件視角
+        setTimeout(() => {
+            blessingCard.classList.add('reveal');
+            setTimeout(() => {
+                blessingCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
         }, 400);
     }
 
@@ -514,7 +597,7 @@
         document.body.innerHTML = `
             <div style="text-align: center; color: #444; font-family: monospace; padding-top: 25vh; padding-left: 20px; padding-right: 20px; animation: fadeInCake 1s ease;">
                 <h2>[ 紀錄已完全銷毀 ]</h2>
-                <p style="font-size:1rem; color:var(--accent-color); margin-top:15px;">生日快樂！願你特別的日子過得最舒心自在 ：）</p>
+                <p style="font-size:1rem; color:#64ffda; margin-top:15px;">生日快樂！願你特別的日子過得最舒心自在 ：）</p>
             </div>
         `;
     }
@@ -569,7 +652,7 @@
         function createLocalFirework() {
             const centerX = canvas.width / 2;
             const burstX = centerX + (Math.random() * 140 - 70);
-            const burstY = canvas.height - 130 - (Math.random() * 70);
+            const burstY = canvas.height - 100 - (Math.random() * 50);
             const color = colors[Math.floor(Math.random() * colors.length)];
             
             for (let i = 0; i < 45; i++) {
