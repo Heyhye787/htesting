@@ -230,7 +230,6 @@
             animation: flicker 0.1s infinite alternate;
             box-shadow: 0 0 10px #ffb86c, 0 0 20px #ff5555, 0 0 30px #f1fa8c;
             z-index: 9;
-            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
         /* 蠟燭 */
@@ -245,7 +244,6 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 8;
-            transition: opacity 0.3s ease, transform 0.4s ease;
         }
 
         /* 草莓 */
@@ -260,7 +258,6 @@
             transform: translateX(-50%);
             z-index: 7;
             box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15);
-            transition: opacity 0.3s ease, transform 0.4s ease;
         }
         .strawberry::before {
             content: '';
@@ -283,12 +280,11 @@
             background: transparent;
         }
 
-        /* 重新定義蛋糕左右部分的漸層，使其融合在一起 */
         .cake-left, .cake-right {
             width: 70px;
             height: 75px;
             position: relative;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .cake-left {
@@ -313,7 +309,6 @@
             transform-origin: right bottom;
         }
 
-        /* 底部金屬盤子，增加立體陰影 */
         .plate-line {
             width: 170px;
             height: 8px;
@@ -325,23 +320,8 @@
             transform: translateX(-50%);
             z-index: 2;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            transition: opacity 0.5s ease;
         }
 
-        /* --- 🔪 切開後的狀態（強制將火光、蠟燭、草莓完全隱藏與移開） --- */
-        .cake-container.cut .flame {
-            opacity: 0 !important;
-            transform: translateX(-50%) scale(0) !important;
-        }
-        .cake-container.cut .candle {
-            opacity: 0 !important;
-            transform: translateX(-50%) translateY(30px) scale(0) !important;
-        }
-        .cake-container.cut .strawberry {
-            opacity: 0 !important;
-            transform: translateX(-50%) translateY(20px) scale(0) !important;
-        }
-        
         /* 蛋糕主體分開動畫 */
         .cake-container.cut .cake-left {
             transform: translateX(-35px) rotate(-8deg);
@@ -367,7 +347,7 @@
 
 <div class="container">
     <div id="start-page">
-        <h2>星座潛意識能量 analysis</h2>
+        <h2>星座潛意識能量分析</h2>
         <p style="font-size: 0.95rem; line-height: 1.5;">本測驗由後端星盤數據模型驅動，專門解析複合型人格。</p>
         
         <div class="input-group">
@@ -471,9 +451,9 @@
             <canvas id="fireworks-canvas"></canvas>
             <div id="my-cake" class="cake-container" onclick="clickCutCake()">
                 <div class="cake-hint" id="cake-prompt">👉 戳一下蛋糕切開驚喜 👈</div>
-                <div class="flame"></div>
-                <div class="candle"></div>
-                <div class="strawberry"></div>
+                <div class="flame" id="cake-flame"></div>
+                <div class="candle" id="cake-candle"></div>
+                <div class="strawberry" id="cake-strawberry"></div>
                 <div class="cake-parts">
                     <div class="cake-left"></div>
                     <div class="cake-right"></div>
@@ -611,7 +591,16 @@
         const cakePrompt = document.getElementById('cake-prompt');
         const blessingCard = document.getElementById('blessing-card');
 
-        // 觸發切開與隱藏動畫
+        // 終極手段：利用 JavaScript 在點擊瞬間直接移除火光、蠟燭、草莓的 DOM 元素
+        const flame = document.getElementById('cake-flame');
+        const candle = document.getElementById('cake-candle');
+        const strawberry = document.getElementById('cake-strawberry');
+        
+        if(flame) flame.remove();
+        if(candle) candle.remove();
+        if(strawberry) strawberry.remove();
+
+        // 觸發蛋糕主體左右滑開動畫
         cakeContainer.classList.add('cut');
         cakePrompt.style.display = 'none';
 
